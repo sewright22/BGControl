@@ -19,9 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".JournalEntryDetailsActivity"
-            android:label="@string/title_activity_journal_entry_details"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".JournalEntryDetailsActivity"></activity>
     </application>
 
 </manifest>
