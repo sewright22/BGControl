@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.home.sewright22.bg_control.JournalEntryDetailsActivity">
+
+    <TextView
+        android:id="@+id/text_start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:id="@+id/text_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_start_time"
+        android:hint="Food"/>
+
+    <EditText
+        android:id="@+id/text_carbs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/text_food"
+        android:hint="Carb Count"/>
+
+
+    <EditText
+        android:id="@+id/text_starting_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_carbs"
+        android:hint="Starting BG"/>
+
+
+
+
+
+    <TextView
+        android:id="@+id/label_bolus_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_starting_bg"
+        android:text="Bolus Type:"/>
+
+    <RadioGroup
+        android:id="@+id/rad_grp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_bolus_type"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Instant"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Square Wave"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dual Wave"/>
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/text_inital_bolus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/rad_grp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:digits="0123456789."
+        android:hint="Initial Bolus"/>
+
+    <EditText
+        android:id="@+id/text_extended_bolus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/text_inital_bolus"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:digits="0123456789."
+        android:hint="Extended Bolus"/>
+
+    <EditText
+        android:id="@+id/text_bolus_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/text_extended_bolus"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:digits="0123456789."
+        android:hint="Bolus Time"/>
+
+    <EditText
+        android:id="@+id/text_final_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Final BG"
+        android:layout_below="@id/text_bolus_time"/>
+
+</RelativeLayout>
