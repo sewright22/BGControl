@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_start_time"
-        android:hint="Food"/>
+        android:hint="@string/hint_activity_journal_entry_details_food"/>
 
     <EditText
         android:id="@+id/text_carbs"
@@ -30,7 +30,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@id/text_food"
-        android:hint="Carb Count"/>
+        android:hint="@string/hint_activity_journal_entry_details_carb_count"/>
 
 
     <EditText
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_carbs"
-        android:hint="Starting BG"/>
+        android:hint="@string/hint_activity_journal_entry_details_starting_bg"/>
 
     <TextView
         android:id="@+id/label_bolus_type"
@@ -86,7 +86,7 @@
         android:layout_alignParentEnd="true"
         android:visibility="gone"
         android:digits="0123456789."
-        android:hint="Initial Bolus"/>
+        android:hint="@string/hint_activity_journal_entry_details_inital_bolus"/>
 
     <EditText
         android:id="@+id/text_extended_bolus"
@@ -98,7 +98,7 @@
         android:layout_alignParentEnd="true"
         android:digits="0123456789."
         android:visibility="gone"
-        android:hint="Extended Bolus"/>
+        android:hint="@string/hint_activity_journal_entry_details_extended_bolus"/>
 
     <EditText
         android:id="@+id/text_bolus_time"
@@ -109,7 +109,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:visibility="gone"
-        android:hint="Bolus Time"/>
+        android:hint="@string/hint_activity_journal_entry_details_bolus_time"/>
 
     <EditText
         android:id="@+id/text_final_bg"

@@ -87,8 +87,12 @@ public class JournalEntry implements Parcelable{
     public String toString() {
         StringBuilder retVal = new StringBuilder();
         //retVal.append(DateFormat.getTimeInstance().format(Time));
-        retVal.append(" Food: ");
         retVal.append(Food);
+        retVal.append(System.getProperty("line.separator"));
+        retVal.append("BOL: ");
+        retVal.append(InitialBolus);
+        retVal.append(" SBG: ");
+        retVal.append(StartingBG);
 
         return retVal.toString();
     }
