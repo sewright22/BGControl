@@ -17,7 +17,11 @@ public class JournalEntry implements Parcelable{
     private String Food;
     private int CarbCount;
 
-    public JournalEntry(){}
+    public JournalEntry()
+    {
+        Time = Calendar.getInstance().getTime();
+        Food = "";
+    }
     public JournalEntry(Parcel in){
         this.Food = (in.readString());
         this.Time = (Date)in.readValue(Date.class.getClassLoader());

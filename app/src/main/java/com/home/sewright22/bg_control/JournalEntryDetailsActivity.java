@@ -28,11 +28,24 @@ public class JournalEntryDetailsActivity extends AppCompatActivity {
         text_finalBG.setInputType(InputType.TYPE_CLASS_NUMBER);;
 
         food.setText(entry.getFood());
-        text_carbs.setText(String.valueOf(entry.getCarbs()));
-        text_bg.setText(String.valueOf(entry.getStartingBG()));
-        text_inital_bolus.setText(String.valueOf(entry.getInitialBolus()));
-        text_finalBG.setText(String.valueOf(entry.getFinalBG()));
-        time.setText(DateFormat.getTimeInstance().format(entry.getStartTime()));
+
+        if(entry.getCarbs() > 0) {
+            text_carbs.setText(String.valueOf(entry.getCarbs()));
+        }
+
+        if(entry.getStartingBG() > 0) {
+            text_bg.setText(String.valueOf(entry.getStartingBG()));
+        }
+
+        if(entry.getInitialBolus() > 0) {
+            text_inital_bolus.setText(String.valueOf(entry.getInitialBolus()));
+        }
+
+        if(entry.getFinalBG() > 0) {
+            text_finalBG.setText(String.valueOf(entry.getFinalBG()));
+        }
+
+        //time.setText(DateFormat.getTimeInstance().format(entry.getStartTime()));
     }
 
 }

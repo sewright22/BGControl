@@ -36,8 +36,13 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
+
+                JournalEntry itemValue = new JournalEntry();
+
+                parcelIntent.putExtra("item", itemValue);
+
+                startActivityForResult(parcelIntent, 1);
             }
         });
 
