@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BG_Control.iml" filepath="$PROJECT_DIR$/BG_Control.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BGControl.iml" filepath="$PROJECT_DIR$/BGControl.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
