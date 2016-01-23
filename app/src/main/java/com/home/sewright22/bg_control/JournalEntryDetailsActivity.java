@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -141,36 +142,41 @@ public class JournalEntryDetailsActivity extends AppCompatActivity {
 
     private void saveData()
     {
-        TextView time = (TextView)findViewById(R.id.text_start_time);
-        EditText food = (EditText)findViewById(R.id.text_food);
-        EditText text_carbs = (EditText)findViewById(R.id.text_carbs);
-        EditText text_bg = (EditText)findViewById(R.id.text_starting_bg);
-        EditText text_inital_bolus = (EditText)findViewById(R.id.text_inital_bolus);
-        EditText text_extended_bolus = (EditText)findViewById(R.id.text_extended_bolus);
-        EditText text_bolus_time = (EditText)findViewById(R.id.text_bolus_time);
-        EditText text_finalBG = (EditText)findViewById(R.id.text_final_bg);
+        try {
+            TextView time = (TextView) findViewById(R.id.text_start_time);
+            EditText food = (EditText) findViewById(R.id.text_food);
+            EditText text_carbs = (EditText) findViewById(R.id.text_carbs);
+            EditText text_bg = (EditText) findViewById(R.id.text_starting_bg);
+            EditText text_inital_bolus = (EditText) findViewById(R.id.text_inital_bolus);
+            EditText text_extended_bolus = (EditText) findViewById(R.id.text_extended_bolus);
+            EditText text_bolus_time = (EditText) findViewById(R.id.text_bolus_time);
+            EditText text_finalBG = (EditText) findViewById(R.id.text_final_bg);
 
-        entry.setFood(food.getText().toString());
-        entry.setCarbCount(Integer.parseInt(text_carbs.getText().toString()));
-        entry.setStartingBG(Integer.parseInt(text_bg.getText().toString()));
+            entry.setFood(food.getText().toString());
+            entry.setCarbCount(Integer.parseInt(text_carbs.getText().toString()));
+            entry.setStartingBG(Integer.parseInt(text_bg.getText().toString()));
 
-        if(entry.getBolus_Type() == R.integer.bolus_instant ||
-                entry.getBolus_Type() == R.integer.bolus_dual_wave) {
-            entry.setInitialBolus(Double.parseDouble(text_inital_bolus.getText().toString()));
+            if (entry.getBolus_Type() == R.integer.bolus_instant ||
+                    entry.getBolus_Type() == R.integer.bolus_dual_wave) {
+                entry.setInitialBolus(Double.parseDouble(text_inital_bolus.getText().toString()));
+            }
+
+            if (entry.getBolus_Type() == R.integer.bolus_extended ||
+                    entry.getBolus_Type() == R.integer.bolus_dual_wave) {
+                entry.setExtendedBolus(Double.parseDouble(text_extended_bolus.getText().toString()));
+                entry.setBolus_Time(Integer.parseInt(text_bolus_time.getText().toString()));
+            }
+
+            if (text_finalBG.getText().length() == 0) {
+                entry.setFinalBG(0);
+            } else {
+                entry.setFinalBG(Integer.parseInt(text_finalBG.getText().toString()));
+            }
         }
-
-        if(entry.getBolus_Type() == R.integer.bolus_extended ||
-                entry.getBolus_Type() == R.integer.bolus_dual_wave  ) {
-            entry.setExtendedBolus(Double.parseDouble(text_extended_bolus.getText().toString()));
-            entry.setBolus_Time(Integer.parseInt(text_bolus_time.getText().toString()));
-        }
-
-        if(text_finalBG.getText().length() == 0)
+        catch (Exception e)
         {
-            entry.setFinalBG(0);
-        }
-        else {
-            entry.setFinalBG(Integer.parseInt(text_finalBG.getText().toString()));
+            setResult(Activity.RESULT_CANCELED);
+            finish();
         }
     }
 

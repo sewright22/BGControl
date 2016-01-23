@@ -9,15 +9,14 @@ public class JournalEntryList {
     private ArrayList<JournalEntry> journalEntries = new ArrayList<JournalEntry>();
     private ArrayList<String> values = new ArrayList<String>();
 
-    public void addJournalEntry(JournalEntry journalEntry)
+    public void updateJournalEntry(JournalEntry journalEntry)
     {
         journalEntries.add(journalEntry);
     }
 
-    public void addJournalEntry(JournalEntry journalEntry, int pos)
+    public void updateJournalEntry(JournalEntry journalEntry, int pos)
     {
-        journalEntries.remove(pos);
-        journalEntries.add(journalEntry);
+        journalEntries.get(pos).update(journalEntry);
     }
 
     public ArrayList<String> getValues() {

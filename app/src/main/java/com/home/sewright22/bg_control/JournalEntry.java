@@ -146,4 +146,16 @@ public class JournalEntry implements Parcelable{
     public Date getStartTime() {
         return Time;
     }
+
+    public void update(JournalEntry in)
+    {
+        this.Food = (in.getFood());
+        this.CarbCount = in.getCarbs();
+        this.Bolus_Type = in.getBolus_Type();
+        this.InitialBolus = in.getInitialBolus();
+        this.ExtendedBolus = in.getExtendedBolus();
+        this.Bolus_Time = in.getBolus_Time();
+        this.StartingBG = in.getStartingBG();
+        this.FinalBG = in.getFinalBG();
+    }
 }

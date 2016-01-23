@@ -3,7 +3,6 @@ package com.home.sewright22.bg_control;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         first.setStartingBG(123);
         first.setInitialBolus(2);
         first.setBolus_Type(R.integer.bolus_instant);
-        journalEntries.addJournalEntry(first);
+        journalEntries.updateJournalEntry(first);
         UpdateDisplayedJournal();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -97,13 +96,13 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode + 1 <= journalEntries.getCount()) {
                 JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
-                journalEntries.addJournalEntry(entry, requestCode);
+                journalEntries.updateJournalEntry(entry, requestCode);
                 UpdateDisplayedJournal();
             }
             else
             {
                 JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
-                journalEntries.addJournalEntry(entry);
+                journalEntries.updateJournalEntry(entry);
                 UpdateDisplayedJournal();
             }
         }
