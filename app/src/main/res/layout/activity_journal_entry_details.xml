@@ -40,10 +40,6 @@
         android:layout_below="@id/text_carbs"
         android:hint="Starting BG"/>
 
-
-
-
-
     <TextView
         android:id="@+id/label_bolus_type"
         android:layout_width="match_parent"
