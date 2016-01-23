@@ -93,6 +93,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    JournalEntry entry = (JournalEntry)data.getExtras().getParcelable("item");
+                    journalEntries.addJournalEntry(entry);
+                    UpdateDisplayedJournal();
+                }
+                break;
+        }
+    }
+
     private void UpdateDisplayedJournal() {
         ListView listView = (ListView) findViewById(R.id.list);
 

@@ -1,5 +1,7 @@
 package com.home.sewright22.bg_control;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -13,12 +15,13 @@ import android.widget.TextView;
 
 public class JournalEntryDetailsActivity extends AppCompatActivity {
 
+    private JournalEntry entry;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_entry_details);
 
-        final JournalEntry entry = (JournalEntry)getIntent().getExtras().getParcelable("item");
+        entry = (JournalEntry)getIntent().getExtras().getParcelable("item");
         TextView time = (TextView)findViewById(R.id.text_start_time);
         EditText food = (EditText)findViewById(R.id.text_food);
         EditText text_carbs = (EditText)findViewById(R.id.text_carbs);
@@ -112,6 +115,11 @@ public class JournalEntryDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
+                saveData();
+                Intent parcelIntent = new Intent(JournalEntryDetailsActivity.this, MainActivity.class);
+                parcelIntent.putExtra("item", entry);
+                setResult(Activity.RESULT_OK, parcelIntent);
+                finish();
                 return true;
 
             default:
@@ -119,6 +127,19 @@ public class JournalEntryDetailsActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void saveData()
+    {
+        TextView time = (TextView)findViewById(R.id.text_start_time);
+        EditText food = (EditText)findViewById(R.id.text_food);
+        EditText text_carbs = (EditText)findViewById(R.id.text_carbs);
+        EditText text_bg = (EditText)findViewById(R.id.text_starting_bg);
+        EditText text_inital_bolus = (EditText)findViewById(R.id.text_inital_bolus);
+        EditText text_finalBG = (EditText)findViewById(R.id.text_final_bg);
+
+        entry.setFood(food.getText().toString());
+        //entry.setCarbCount(Integer.parseInt(text_carbs.toString()));
     }
 
 }
