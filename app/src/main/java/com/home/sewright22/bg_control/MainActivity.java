@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 // super awesome comment by dtw
 //test 2
+//test 3
 public class MainActivity extends AppCompatActivity {
     private JournalEntryList journalEntries = new JournalEntryList();
 
