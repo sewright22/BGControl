@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         first.setCarbCount(24);
         first.setStartingBG(123);
         first.setInitialBolus(2);
+        first.setBolus_Type(R.integer.bolus_instant);
         journalEntries.addJournalEntry(first);
         UpdateDisplayedJournal();
 

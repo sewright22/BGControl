@@ -16,6 +16,15 @@ public class JournalEntry implements Parcelable{
     private Date Time;
     private String Food;
     private int CarbCount;
+    private int Bolus_Type;
+
+    public int getBolus_Type() {
+        return Bolus_Type;
+    }
+
+    public void setBolus_Type(int bolus_Type) {
+        Bolus_Type = bolus_Type;
+    }
 
     public JournalEntry()
     {
@@ -26,6 +35,7 @@ public class JournalEntry implements Parcelable{
         this.Food = (in.readString());
         this.Time = (Date)in.readValue(Date.class.getClassLoader());
         this.CarbCount = in.readInt();
+        this.Bolus_Type = in.readInt();
         this.InitialBolus = in.readDouble();
         this.StartingBG = in.readInt();
         this.FinalBG = in.readInt();
@@ -73,6 +83,7 @@ public class JournalEntry implements Parcelable{
         dest.writeString(Food);
         dest.writeValue(Time);
         dest.writeInt(CarbCount);
+        dest.writeInt(Bolus_Type);
         dest.writeDouble(InitialBolus);
         dest.writeInt(StartingBG);
         dest.writeInt(FinalBG);
