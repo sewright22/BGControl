@@ -104,11 +104,10 @@
         android:id="@+id/text_bolus_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
+        android:inputType="number"
         android:layout_below="@id/text_extended_bolus"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:digits="0123456789."
         android:visibility="gone"
         android:hint="Bolus Time"/>
 

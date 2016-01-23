@@ -13,18 +13,12 @@ public class JournalEntry implements Parcelable{
     private int StartingBG;
     private int FinalBG;
     private double InitialBolus;
+    private double ExtendedBolus;
     private Date Time;
     private String Food;
     private int CarbCount;
     private int Bolus_Type;
-
-    public int getBolus_Type() {
-        return Bolus_Type;
-    }
-
-    public void setBolus_Type(int bolus_Type) {
-        Bolus_Type = bolus_Type;
-    }
+    private int Bolus_Time;
 
     public JournalEntry()
     {
@@ -37,6 +31,8 @@ public class JournalEntry implements Parcelable{
         this.CarbCount = in.readInt();
         this.Bolus_Type = in.readInt();
         this.InitialBolus = in.readDouble();
+        this.ExtendedBolus = in.readDouble();
+        this.Bolus_Time = in.readInt();
         this.StartingBG = in.readInt();
         this.FinalBG = in.readInt();
     }
@@ -63,6 +59,30 @@ public class JournalEntry implements Parcelable{
         CarbCount = cc;
     }
 
+    public double getExtendedBolus() {
+        return ExtendedBolus;
+    }
+
+    public void setExtendedBolus(double extendedBolus) {
+        ExtendedBolus = extendedBolus;
+    }
+
+    public int getBolus_Type() {
+        return Bolus_Type;
+    }
+
+    public void setBolus_Type(int bolus_Type) {
+        Bolus_Type = bolus_Type;
+    }
+
+    public int getBolus_Time() {
+        return Bolus_Time;
+    }
+
+    public void setBolus_Time(int bolus_Time) {
+        Bolus_Time = bolus_Time;
+    }
+
     @Override
     public String toString() {
         StringBuilder retVal = new StringBuilder();
@@ -85,6 +105,8 @@ public class JournalEntry implements Parcelable{
         dest.writeInt(CarbCount);
         dest.writeInt(Bolus_Type);
         dest.writeDouble(InitialBolus);
+        dest.writeDouble(ExtendedBolus);
+        dest.writeInt(Bolus_Time);
         dest.writeInt(StartingBG);
         dest.writeInt(FinalBG);
     }

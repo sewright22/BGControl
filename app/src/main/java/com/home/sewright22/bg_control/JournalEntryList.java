@@ -14,6 +14,12 @@ public class JournalEntryList {
         journalEntries.add(journalEntry);
     }
 
+    public void addJournalEntry(JournalEntry journalEntry, int pos)
+    {
+        journalEntries.remove(pos);
+        journalEntries.add(journalEntry);
+    }
+
     public ArrayList<String> getValues() {
         for (JournalEntry entry:journalEntries
                 )
@@ -26,5 +32,10 @@ public class JournalEntryList {
 
     public ArrayList<JournalEntry> getJournalEntries() {
         return journalEntries;
+    }
+
+    public int getCount()
+    {
+        return journalEntries.size();
     }
 }
