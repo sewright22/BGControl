@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="bolus_instant">1</integer>
+    <integer name="bolus_extended">2</integer>
+    <integer name="bolus_dual_wave">3</integer>
+</resources>

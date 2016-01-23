@@ -57,17 +57,19 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/rad_instant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Instant"/>
 
         <RadioButton
+            android:id="@+id/rad_square"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Square Wave"/>
 
         <RadioButton
+            android:id="@+id/rad_dual_wave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dual Wave"/>
@@ -82,6 +84,7 @@
         android:layout_below="@id/rad_grp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
         android:digits="0123456789."
         android:hint="Initial Bolus"/>
 
@@ -94,6 +97,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:digits="0123456789."
+        android:visibility="gone"
         android:hint="Extended Bolus"/>
 
     <EditText
@@ -105,6 +109,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:digits="0123456789."
+        android:visibility="gone"
         android:hint="Bolus Time"/>
 
     <EditText
@@ -112,6 +117,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Final BG"
+        android:visibility="gone"
         android:layout_below="@id/text_bolus_time"/>
 
 </RelativeLayout>

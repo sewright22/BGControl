@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         first.setCarbCount(24);
         first.setStartingBG(123);
         first.setInitialBolus(2);
+        first.setBolus_Type(R.integer.bolus_instant);
         journalEntries.addJournalEntry(first);
         UpdateDisplayedJournal();
 
@@ -90,6 +91,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    JournalEntry entry = (JournalEntry)data.getExtras().getParcelable("item");
+                    journalEntries.addJournalEntry(entry);
+                    UpdateDisplayedJournal();
+                }
+                break;
+        }
     }
 
     private void UpdateDisplayedJournal() {
