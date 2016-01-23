@@ -60,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
                 ListView listView = (ListView) findViewById(R.id.list);
 
                 // ListView Clicked item value
-                JournalEntry itemValue = (JournalEntry) listView.getItemAtPosition(position);
+                JournalEntry itemValue = (JournalEntry) listView.getItemAtPosition(itemPosition);
 
                 parcelIntent.putExtra("item", itemValue);
 
-                startActivityForResult(parcelIntent, position);
+                startActivityForResult(parcelIntent, itemPosition);
             }
 
         });
