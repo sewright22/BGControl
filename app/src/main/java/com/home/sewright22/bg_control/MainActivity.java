@@ -12,8 +12,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-// super awesome comment by dtw
-//test 2
+
 public class MainActivity extends AppCompatActivity {
     private JournalEntryList journalEntries = new JournalEntryList();
 
