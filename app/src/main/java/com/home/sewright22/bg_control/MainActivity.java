@@ -28,7 +28,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
     private JournalEntryList journalEntries = new JournalEntryList();
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient client;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -54,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
         UpdateDisplayedJournal();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
 
                 JournalEntry itemValue = new JournalEntry();
@@ -68,11 +72,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ListView Item Click Listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                                    int position, long id)
+            {
 
                 Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
 
@@ -95,21 +101,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
 
@@ -117,38 +126,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) if (requestCode + 1 <= journalEntries.getCount()) {
-            JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
-            journalEntries.updateJournalEntry(entry, requestCode);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == RESULT_OK)
+        {
+            if (requestCode + 1 <= journalEntries.getCount())
+            {
+                JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
+                journalEntries.updateJournalEntry(entry, requestCode);
 
-            android.support.v4.app.NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setContentTitle(entry.toString())
-                            .setContentText("Please enter your current BG.");
+                android.support.v4.app.NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle(entry.toString())
+                                .setContentText("Please enter your current BG.");
 
-            PendingIntent resultPendingIntent =
-                    PendingIntent.getActivity(
-                            this,
-                            0,
-                            data,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
+                PendingIntent resultPendingIntent =
+                        PendingIntent.getActivity(
+                                this,
+                                0,
+                                data,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
 
-            mBuilder.setContentIntent(resultPendingIntent);
+                mBuilder.setContentIntent(resultPendingIntent);
 
-            scheduleNotification(mBuilder.build(), 10);
+                scheduleNotification(mBuilder.build(), 10);
 
-            UpdateDisplayedJournal();
-        } else {
-            JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
-            journalEntries.updateJournalEntry(entry);
-            UpdateDisplayedJournal();
+                UpdateDisplayedJournal();
+            }
+            else
+            {
+                JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
+                journalEntries.updateJournalEntry(entry);
+                UpdateDisplayedJournal();
+            }
         }
     }
 
-    private void scheduleNotification(Notification notification, int delayInSeconds) {
+    private void scheduleNotification(Notification notification, int delayInSeconds)
+    {
 
         Intent notificationIntent = new Intent(MainActivity.this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 001);
@@ -156,12 +173,13 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long futureInMillis = SystemClock.elapsedRealtime() + delayInSeconds * 1000;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
 
-    private void UpdateDisplayedJournal() {
+    private void UpdateDisplayedJournal()
+    {
         ListView listView = (ListView) findViewById(R.id.list);
 
         // Define a new Adapter
@@ -170,13 +188,14 @@ public class MainActivity extends AppCompatActivity {
         // Third parameter - ID of the TextView to which the data is written
         // Forth - the Array of data
         ArrayAdapter<JournalEntry> adapter = new ArrayAdapter<JournalEntry>(this,
-                android.R.layout.simple_list_item_2, android.R.id.text1, journalEntries.getJournalEntries());
+                                                                            android.R.layout.simple_list_item_2, android.R.id.text1, journalEntries.getJournalEntries());
 
         listView.setAdapter(adapter);
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -196,7 +215,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         super.onStop();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.

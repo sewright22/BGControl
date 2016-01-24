@@ -5,7 +5,8 @@ import java.util.ArrayList;
 /**
  * Created by steve on 1/22/2016.
  */
-public class JournalEntryList {
+public class JournalEntryList
+{
     private ArrayList<JournalEntry> journalEntries = new ArrayList<JournalEntry>();
     private ArrayList<String> values = new ArrayList<String>();
 
@@ -19,9 +20,9 @@ public class JournalEntryList {
         journalEntries.get(pos).update(journalEntry);
     }
 
-    public ArrayList<String> getValues() {
-        for (JournalEntry entry:journalEntries
-                )
+    public ArrayList<String> getValues()
+    {
+        for (JournalEntry entry : journalEntries)
         {
             values.add(entry.toString());
         }
@@ -29,7 +30,8 @@ public class JournalEntryList {
         return values;
     }
 
-    public ArrayList<JournalEntry> getJournalEntries() {
+    public ArrayList<JournalEntry> getJournalEntries()
+    {
         return journalEntries;
     }
 

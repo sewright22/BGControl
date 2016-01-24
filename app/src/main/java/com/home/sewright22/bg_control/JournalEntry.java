@@ -9,7 +9,8 @@ import java.util.Date;
 /**
  * Created by steve on 1/22/2016.
  */
-public class JournalEntry implements Parcelable{
+public class JournalEntry implements Parcelable
+{
     private int StartingBG;
     private int FinalBG;
     private double InitialBolus;
@@ -25,9 +26,11 @@ public class JournalEntry implements Parcelable{
         Time = Calendar.getInstance().getTime();
         Food = "";
     }
-    public JournalEntry(Parcel in){
+
+    public JournalEntry(Parcel in)
+    {
         this.Food = (in.readString());
-        this.Time = (Date)in.readValue(Date.class.getClassLoader());
+        this.Time = (Date) in.readValue(Date.class.getClassLoader());
         this.CarbCount = in.readInt();
         this.Bolus_Type = in.readInt();
         this.InitialBolus = in.readDouble();
@@ -37,15 +40,18 @@ public class JournalEntry implements Parcelable{
         this.FinalBG = in.readInt();
     }
 
-    public void setStartingBG(int startingBG) {
+    public void setStartingBG(int startingBG)
+    {
         StartingBG = startingBG;
     }
 
-    public void setFinalBG(int finalBG) {
+    public void setFinalBG(int finalBG)
+    {
         FinalBG = finalBG;
     }
 
-    public void setInitialBolus(double initialBolus) {
+    public void setInitialBolus(double initialBolus)
+    {
         InitialBolus = initialBolus;
     }
 
@@ -55,36 +61,44 @@ public class JournalEntry implements Parcelable{
         Food = food;
     }
 
-    public void setCarbCount(int cc){
+    public void setCarbCount(int cc)
+    {
         CarbCount = cc;
     }
 
-    public double getExtendedBolus() {
+    public double getExtendedBolus()
+    {
         return ExtendedBolus;
     }
 
-    public void setExtendedBolus(double extendedBolus) {
+    public void setExtendedBolus(double extendedBolus)
+    {
         ExtendedBolus = extendedBolus;
     }
 
-    public int getBolus_Type() {
+    public int getBolus_Type()
+    {
         return Bolus_Type;
     }
 
-    public void setBolus_Type(int bolus_Type) {
+    public void setBolus_Type(int bolus_Type)
+    {
         Bolus_Type = bolus_Type;
     }
 
-    public int getBolus_Time() {
+    public int getBolus_Time()
+    {
         return Bolus_Time;
     }
 
-    public void setBolus_Time(int bolus_Time) {
+    public void setBolus_Time(int bolus_Time)
+    {
         Bolus_Time = bolus_Time;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         StringBuilder retVal = new StringBuilder();
         //retVal.append(DateFormat.getTimeInstance().format(Time));
         retVal.append(Food);
@@ -98,12 +112,14 @@ public class JournalEntry implements Parcelable{
     }
 
     @Override
-    public int describeContents() {
+    public int describeContents()
+    {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, int flags)
+    {
         dest.writeString(Food);
         dest.writeValue(Time);
         dest.writeInt(CarbCount);
@@ -115,39 +131,48 @@ public class JournalEntry implements Parcelable{
         dest.writeInt(FinalBG);
     }
 
-    public static final Parcelable.Creator<JournalEntry> CREATOR = new Parcelable.Creator<JournalEntry>() {
+    public static final Parcelable.Creator<JournalEntry> CREATOR = new Parcelable.Creator<JournalEntry>()
+    {
 
-        public JournalEntry createFromParcel(Parcel in) {
+        public JournalEntry createFromParcel(Parcel in)
+        {
             return new JournalEntry(in);
         }
 
-        public JournalEntry[] newArray(int size) {
+        public JournalEntry[] newArray(int size)
+        {
             return new JournalEntry[size];
         }
     };
 
 
-    public String getFood() {
+    public String getFood()
+    {
         return Food;
     }
 
-    public int getCarbs() {
+    public int getCarbs()
+    {
         return CarbCount;
     }
 
-    public int getStartingBG() {
+    public int getStartingBG()
+    {
         return StartingBG;
     }
 
-    public double getInitialBolus() {
+    public double getInitialBolus()
+    {
         return InitialBolus;
     }
 
-    public int getFinalBG() {
+    public int getFinalBG()
+    {
         return FinalBG;
     }
 
-    public Date getStartTime() {
+    public Date getStartTime()
+    {
         return Time;
     }
 
