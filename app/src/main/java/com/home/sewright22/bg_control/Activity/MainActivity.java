@@ -24,6 +24,8 @@ import android.widget.ListView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.home.sewright22.bg_control.Contract.JournalEntryContract;
+import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
 import com.home.sewright22.bg_control.Model.JournalEntryList;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.NotificationPublisher;
@@ -47,13 +49,15 @@ public class MainActivity extends AppCompatActivity
         ListView listView = (ListView) findViewById(R.id.list);
         setSupportActionBar(toolbar);
 
-        JournalEntry first = new JournalEntry();
-        first.setFood("Cake");
-        first.setCarbCount(24);
-        first.setStartingBG(123);
-        first.setInitialBolus(2);
-        first.setBolus_Type(R.integer.bolus_instant);
-        journalEntries.updateJournalEntry(first);
+//        JournalEntry first = new JournalEntry();
+//        first.setFood("Cake");
+//        first.setCarbCount(24);
+//        first.setStartingBG(123);
+//        first.setInitialBolus(2);
+//        first.setBolus_Type(R.integer.bolus_instant);
+//        journalEntries.updateJournalEntry(first);
+
+        JournalEntryDbHelper mDbHelper = new JournalEntryDbHelper(this);
         UpdateDisplayedJournal();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
