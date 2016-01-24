@@ -132,11 +132,12 @@ public class MainActivity extends AppCompatActivity
 
             if (requestCode + 1 <= journalEntries.getCount())
             {
-                journalEntries.updateJournalEntry(entry, requestCode);
+                journalEntries.insertJournalEntry(entry, requestCode);
             }
             else
             {
-                journalEntries.updateJournalEntry(entry);
+                mDbHelper.insertJournalEntry(entry);
+                journalEntries.insertJournalEntry(entry);
             }
 
             createBloodSugarReminder(entry);
@@ -198,7 +199,7 @@ public class MainActivity extends AppCompatActivity
     private void UpdateDisplayedJournal()
     {
         ListView listView = (ListView) findViewById(R.id.list);
-
+        journalEntries.clear();
         //insertTestRecord();
         Cursor cursor = mDbHelper.getAllEntries();
         cursor.moveToFirst();
@@ -212,10 +213,10 @@ public class MainActivity extends AppCompatActivity
             entry.setCarbCount(cursor.getInt(3));
             entry.setStartingBG(cursor.getInt(4));
             entry.setBolus_Type(cursor.getInt(5));
-            entry.setInitialBolus(cursor.getInt(6));
-            entry.setExtendedBolus(cursor.getInt(7));
-            entry.setBolus_Time(cursor.getInt(7));
-            journalEntries.updateJournalEntry(entry);
+            entry.setInitialBolus(cursor.getDouble(6));
+            entry.setExtendedBolus(cursor.getDouble(7));
+            entry.setBolus_Time(cursor.getInt(8));
+            journalEntries.insertJournalEntry(entry);
             cursor.moveToNext();
         }
         // Define a new Adapter

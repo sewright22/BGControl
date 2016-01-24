@@ -12,14 +12,19 @@ public class JournalEntryList
     private ArrayList<JournalEntry> journalEntries = new ArrayList<JournalEntry>();
     private ArrayList<String> values = new ArrayList<String>();
 
-    public void updateJournalEntry(JournalEntry journalEntry)
+    public void insertJournalEntry(JournalEntry journalEntry)
     {
         journalEntries.add(journalEntry);
     }
 
-    public void updateJournalEntry(JournalEntry journalEntry, int pos)
+    public void insertJournalEntry(JournalEntry journalEntry, int pos)
     {
         journalEntries.get(pos).update(journalEntry);
+    }
+
+    public void clear()
+    {
+        journalEntries.clear();
     }
 
     public ArrayList<String> getValues()
