@@ -131,38 +131,45 @@ public class MainActivity extends AppCompatActivity
     {
         if (resultCode == RESULT_OK)
         {
+            JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
+
             if (requestCode + 1 <= journalEntries.getCount())
             {
-                JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
                 journalEntries.updateJournalEntry(entry, requestCode);
-
-                android.support.v4.app.NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(this)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setContentTitle(entry.toString())
-                                .setContentText("Please enter your current BG.");
-
-                PendingIntent resultPendingIntent =
-                        PendingIntent.getActivity(
-                                this,
-                                0,
-                                data,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-
-                mBuilder.setContentIntent(resultPendingIntent);
-
-                scheduleNotification(mBuilder.build(), 10);
-
-                UpdateDisplayedJournal();
             }
             else
             {
-                JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
                 journalEntries.updateJournalEntry(entry);
-                UpdateDisplayedJournal();
             }
+
+            createBloodSugarReminder(entry);
+
+            UpdateDisplayedJournal();
         }
+    }
+
+    private void createBloodSugarReminder(JournalEntry entry)
+    {
+        android.support.v4.app.NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(entry.toString())
+                        .setContentText("Please enter your current BG.");
+
+        Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
+        parcelIntent.putExtra("item", entry);
+
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        parcelIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        scheduleNotification(mBuilder.build(), 10);
     }
 
     private void scheduleNotification(Notification notification, int delayInSeconds)

@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.R;
 
+import java.text.DateFormat;
+
 public class JournalEntryDetailsActivity extends AppCompatActivity
 {
 
@@ -43,37 +45,43 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         text_finalBG.setInputType(InputType.TYPE_CLASS_NUMBER);
         text_finalBG.setVisibility(View.VISIBLE);
 
+        time.setText(DateFormat.getTimeInstance().format(entry.getStartTime()));
         food.setText(entry.getFood());
 
         if (entry.getCarbs() > 0)
         {
             text_carbs.setText(String.valueOf(entry.getCarbs()));
+            text_carbs.setEnabled(false);
         }
 
         if (entry.getStartingBG() > 0)
         {
             text_bg.setText(String.valueOf(entry.getStartingBG()));
+            text_bg.setEnabled(false);
         }
 
         if (entry.getInitialBolus() > 0)
         {
             text_inital_bolus.setText(String.valueOf(entry.getInitialBolus()));
+            text_inital_bolus.setEnabled(false);
         }
 
         if (entry.getExtendedBolus() > 0)
         {
             text_extended_bolus.setText(String.valueOf(entry.getExtendedBolus()));
+            text_extended_bolus.setEnabled(false);
         }
 
         if (entry.getBolus_Time() > 0)
         {
             text_bolus_time.setText(String.valueOf(entry.getBolus_Time()));
+            text_bolus_time.setEnabled(false);
         }
 
         if (entry.getFinalBG() > 0)
         {
-
             text_finalBG.setText(String.valueOf(entry.getFinalBG()));
+            text_finalBG.setEnabled(false);
         }
 
 

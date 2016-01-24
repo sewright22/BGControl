@@ -57,7 +57,6 @@ public class JournalEntry implements Parcelable
 
     public void setFood(String food)
     {
-        Time = Calendar.getInstance().getTime();
         Food = food;
     }
 
@@ -76,25 +75,57 @@ public class JournalEntry implements Parcelable
         ExtendedBolus = extendedBolus;
     }
 
-    public int getBolus_Type()
-    {
-        return Bolus_Type;
-    }
-
     public void setBolus_Type(int bolus_Type)
     {
         Bolus_Type = bolus_Type;
-    }
-
-    public int getBolus_Time()
-    {
-        return Bolus_Time;
     }
 
     public void setBolus_Time(int bolus_Time)
     {
         Bolus_Time = bolus_Time;
     }
+
+    public int getBolus_Type()
+    {
+        return Bolus_Type;
+    }
+
+
+    public int getBolus_Time()
+    {
+        return Bolus_Time;
+    }
+
+    public String getFood()
+    {
+        return Food;
+    }
+
+    public int getCarbs()
+    {
+        return CarbCount;
+    }
+
+    public int getStartingBG()
+    {
+        return StartingBG;
+    }
+
+    public double getInitialBolus()
+    {
+        return InitialBolus;
+    }
+
+    public int getFinalBG()
+    {
+        return FinalBG;
+    }
+
+    public Date getStartTime()
+    {
+        return Time;
+    }
+
 
     @Override
     public String toString()
@@ -144,37 +175,6 @@ public class JournalEntry implements Parcelable
             return new JournalEntry[size];
         }
     };
-
-
-    public String getFood()
-    {
-        return Food;
-    }
-
-    public int getCarbs()
-    {
-        return CarbCount;
-    }
-
-    public int getStartingBG()
-    {
-        return StartingBG;
-    }
-
-    public double getInitialBolus()
-    {
-        return InitialBolus;
-    }
-
-    public int getFinalBG()
-    {
-        return FinalBG;
-    }
-
-    public Date getStartTime()
-    {
-        return Time;
-    }
 
     public void update(JournalEntry in)
     {
