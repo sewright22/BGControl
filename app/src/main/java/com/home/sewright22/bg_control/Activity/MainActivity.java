@@ -24,7 +24,6 @@ import android.widget.ListView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.home.sewright22.bg_control.Contract.JournalEntryContract;
 import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
 import com.home.sewright22.bg_control.Model.JournalEntryList;
 import com.home.sewright22.bg_control.Model.JournalEntry;
