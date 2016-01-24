@@ -1,18 +1,15 @@
-package com.home.sewright22.bg_control;
+package com.home.sewright22.bg_control.Activity;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.AlarmClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
@@ -27,6 +24,10 @@ import android.widget.ListView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.home.sewright22.bg_control.Model.JournalEntryList;
+import com.home.sewright22.bg_control.Model.JournalEntry;
+import com.home.sewright22.bg_control.NotificationPublisher;
+import com.home.sewright22.bg_control.R;
 
 public class MainActivity extends AppCompatActivity
 {

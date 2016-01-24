@@ -1,4 +1,6 @@
-package com.home.sewright22.bg_control;
+package com.home.sewright22.bg_control.Model;
+
+import com.home.sewright22.bg_control.Model.JournalEntry;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.home.sewright22.bg_control;
+package com.home.sewright22.bg_control.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

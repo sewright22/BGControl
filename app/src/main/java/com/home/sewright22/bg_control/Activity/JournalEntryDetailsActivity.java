@@ -1,11 +1,10 @@
-package com.home.sewright22.bg_control;
+package com.home.sewright22.bg_control.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +12,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.home.sewright22.bg_control.Model.JournalEntry;
+import com.home.sewright22.bg_control.R;
 
 public class JournalEntryDetailsActivity extends AppCompatActivity
 {
@@ -39,7 +41,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         text_carbs.setInputType(InputType.TYPE_CLASS_NUMBER);
         text_bg.setInputType(InputType.TYPE_CLASS_NUMBER);
         text_finalBG.setInputType(InputType.TYPE_CLASS_NUMBER);
-        ;
+        text_finalBG.setVisibility(View.VISIBLE);
 
         food.setText(entry.getFood());
 
@@ -70,6 +72,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
 
         if (entry.getFinalBG() > 0)
         {
+
             text_finalBG.setText(String.valueOf(entry.getFinalBG()));
         }
 
