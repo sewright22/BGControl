@@ -2,7 +2,6 @@ package com.home.sewright22.bg_control.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -20,6 +19,7 @@ public class JournalEntry implements Parcelable
     private int CarbCount;
     private int Bolus_Type;
     private int Bolus_Time;
+    private int _time_elapsed_in_minutes;
 
     public JournalEntry()
     {
@@ -48,6 +48,13 @@ public class JournalEntry implements Parcelable
     public void setFinalBG(int finalBG)
     {
         FinalBG = finalBG;
+
+        if(finalBG > 0)
+        {
+            long timeInMillis = Calendar.getInstance().getTimeInMillis() - Time.getTime();
+            long timeInSeconds = timeInMillis/1000;
+            _time_elapsed_in_minutes = (int)(timeInSeconds/60);
+        }
     }
 
     public void setInitialBolus(double initialBolus)
@@ -126,6 +133,10 @@ public class JournalEntry implements Parcelable
         return Time;
     }
 
+    public int get_time_elapsed_in_minutes()
+    {
+        return _time_elapsed_in_minutes;
+    }
 
     @Override
     public String toString()

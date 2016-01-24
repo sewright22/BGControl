@@ -196,7 +196,9 @@ public class MainActivity extends AppCompatActivity
         // Third parameter - ID of the TextView to which the data is written
         // Forth - the Array of data
         ArrayAdapter<JournalEntry> adapter = new ArrayAdapter<JournalEntry>(this,
-                                                                            android.R.layout.simple_list_item_2, android.R.id.text1, journalEntries.getJournalEntries());
+                                                                            android.R.layout.simple_list_item_2,
+                                                                            android.R.id.text1,
+                                                                            journalEntries.getJournalEntries());
 
         listView.setAdapter(adapter);
     }
