@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.home.sewright22.bg_control.R;
 
 public class MainActivity extends AppCompatActivity
 {
+    private JournalEntryDbHelper mDbHelper;
     private JournalEntryList journalEntries = new JournalEntryList();
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -47,16 +49,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ListView listView = (ListView) findViewById(R.id.list);
         setSupportActionBar(toolbar);
+        mDbHelper = new JournalEntryDbHelper(this);
 
-//        JournalEntry first = new JournalEntry();
-//        first.setFood("Cake");
-//        first.setCarbCount(24);
-//        first.setStartingBG(123);
-//        first.setInitialBolus(2);
-//        first.setBolus_Type(R.integer.bolus_instant);
-//        journalEntries.updateJournalEntry(first);
-
-        JournalEntryDbHelper mDbHelper = new JournalEntryDbHelper(this);
         UpdateDisplayedJournal();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -188,11 +182,42 @@ public class MainActivity extends AppCompatActivity
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
+    private void insertTestRecord()
+    {
+        JournalEntry first = new JournalEntry();
+        first.setFood("Cake");
+        first.setCarbCount(24);
+        first.setStartingBG(123);
+       first.setInitialBolus(2);
+        first.setBolus_Type(R.integer.bolus_instant);
+        JournalEntryDbHelper mDbHelper = new JournalEntryDbHelper(this);
+        mDbHelper.insertJournalEntry(first);
+    }
+
 
     private void UpdateDisplayedJournal()
     {
         ListView listView = (ListView) findViewById(R.id.list);
 
+        //insertTestRecord();
+        Cursor cursor = mDbHelper.getAllEntries();
+        cursor.moveToFirst();
+
+        while(cursor.isAfterLast() == false)
+        {
+            JournalEntry entry = new JournalEntry();
+            String date = cursor.getString(1);
+            entry.setTime(date);
+            entry.setFood(cursor.getString(2));
+            entry.setCarbCount(cursor.getInt(3));
+            entry.setStartingBG(cursor.getInt(4));
+            entry.setBolus_Type(cursor.getInt(5));
+            entry.setInitialBolus(cursor.getInt(6));
+            entry.setExtendedBolus(cursor.getInt(7));
+            entry.setBolus_Time(cursor.getInt(7));
+            journalEntries.updateJournalEntry(entry);
+            cursor.moveToNext();
+        }
         // Define a new Adapter
         // First parameter - Context
         // Second parameter - Layout for the row

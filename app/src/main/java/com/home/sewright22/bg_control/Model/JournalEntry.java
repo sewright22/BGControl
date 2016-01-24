@@ -2,6 +2,9 @@ package com.home.sewright22.bg_control.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -92,11 +95,23 @@ public class JournalEntry implements Parcelable
         Bolus_Time = bolus_Time;
     }
 
+    public void setTime(String date)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM kk:mm:ss zzz yyyy");
+        try
+        {
+            Time = dateFormat.parse(date);
+        }
+        catch(ParseException pe)
+        {
+
+        }
+    }
+
     public int getBolus_Type()
     {
         return Bolus_Type;
     }
-
 
     public int getBolus_Time()
     {

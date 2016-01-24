@@ -1,29 +1,23 @@
 package com.home.sewright22.bg_control.Contract;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+
+import com.home.sewright22.bg_control.Model.JournalEntry;
 
 /**
  * Created by steve on 1/24/2016.
  */
 public class JournalEntryDbHelper extends SQLiteOpenHelper
 {
-    public static final String TABLE_NAME = "journal_entry";
-    public static final String COLUMN_NAME_FOOD = "food";
-    public static final String COLUMN_NAME_CARB_COUNT = "carb_count";
-    public static final String COLUMN_NAME_STARTING_BG = "starting_bg";
-    public static final String COLUMN_NAME_BOLUS_TYPE = "bolus_type";
-    public static final String COLUMN_NAME_INITIAL_BOLUS = "initial_bolus";
-    public static final String COLUMN_NAME_EXTENDED_BOLUS = "extended_bolus";
-    public static final String COLUMN_NAME_BOLUS_TIME = "bolus_time";
-    public static final String COLUMN_NAME_FINAL_BG = "final_bg";
-    public static final String COLUMN_NAME_TIME_ELAPSED = "time_elapsed";
-
-    public static abstract class JournalEntry implements BaseColumns
+    public static abstract class JournalEntryTable implements BaseColumns
     {
         public static final String TABLE_NAME = "journal_entry";
+        public static final String COLUMN_NAME_DATE = "date";
         public static final String COLUMN_NAME_FOOD = "food";
         public static final String COLUMN_NAME_CARB_COUNT = "carb_count";
         public static final String COLUMN_NAME_STARTING_BG = "starting_bg";
@@ -41,17 +35,18 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
     private static final String COMMA_SEP = ",";
 
     private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " +
-            JournalEntry.TABLE_NAME + " (" +
-            JournalEntry._ID + " INTEGER PRIMARY KEY," +
-            JournalEntry.COLUMN_NAME_FOOD + TEXT_TYPE + COMMA_SEP +
-            JournalEntry.COLUMN_NAME_CARB_COUNT + INTEGER_TYPE + COMMA_SEP +
-            JournalEntry.COLUMN_NAME_STARTING_BG + INTEGER_TYPE + COMMA_SEP +
-            JournalEntry.COLUMN_NAME_BOLUS_TYPE + INTEGER_TYPE + COMMA_SEP +
-            JournalEntry.COLUMN_NAME_INITIAL_BOLUS + TEXT_TYPE + COMMA_SEP +
-            JournalEntry.COLUMN_NAME_EXTENDED_BOLUS + TEXT_TYPE + COMMA_SEP +
-            JournalEntry.COLUMN_NAME_BOLUS_TIME + DATE_TYPE + COMMA_SEP + " )";
+            JournalEntryTable.TABLE_NAME + " (" +
+            JournalEntryTable._ID + " INTEGER PRIMARY KEY," +
+            JournalEntryTable.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
+            JournalEntryTable.COLUMN_NAME_FOOD + TEXT_TYPE + COMMA_SEP +
+            JournalEntryTable.COLUMN_NAME_CARB_COUNT + INTEGER_TYPE + COMMA_SEP +
+            JournalEntryTable.COLUMN_NAME_STARTING_BG + INTEGER_TYPE + COMMA_SEP +
+            JournalEntryTable.COLUMN_NAME_BOLUS_TYPE + INTEGER_TYPE + COMMA_SEP +
+            JournalEntryTable.COLUMN_NAME_INITIAL_BOLUS + TEXT_TYPE + COMMA_SEP +
+            JournalEntryTable.COLUMN_NAME_EXTENDED_BOLUS + TEXT_TYPE + COMMA_SEP +
+            JournalEntryTable.COLUMN_NAME_BOLUS_TIME + INTEGER_TYPE  + " )";
 
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + JournalEntry.TABLE_NAME;
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + JournalEntryTable.TABLE_NAME;
 
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
@@ -64,6 +59,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
 
     public void onCreate(SQLiteDatabase db)
     {
+        db.execSQL(SQL_DELETE_ENTRIES);
         db.execSQL(SQL_CREATE_ENTRIES);
     }
 
@@ -78,5 +74,27 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public boolean insertJournalEntry(JournalEntry entry)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(JournalEntryTable.COLUMN_NAME_DATE, entry.getStartTime().toString());
+        contentValues.put(JournalEntryTable.COLUMN_NAME_FOOD, entry.getFood());
+        contentValues.put(JournalEntryTable.COLUMN_NAME_CARB_COUNT, entry.getCarbs());
+        contentValues.put(JournalEntryTable.COLUMN_NAME_STARTING_BG, entry.getStartingBG());
+        contentValues.put(JournalEntryTable.COLUMN_NAME_BOLUS_TYPE, entry.getBolus_Type());
+        contentValues.put(JournalEntryTable.COLUMN_NAME_INITIAL_BOLUS, entry.getInitialBolus());
+        contentValues.put(JournalEntryTable.COLUMN_NAME_EXTENDED_BOLUS, entry.getExtendedBolus());
+        contentValues.put(JournalEntryTable.COLUMN_NAME_BOLUS_TIME, entry.getBolus_Time());
+        db.insert(JournalEntryTable.TABLE_NAME, null, contentValues);
+        return true;
+    }
+
+    public Cursor getAllEntries() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery( "SELECT * FROM " + JournalEntryTable.TABLE_NAME, null );
+        return res;
     }
 }
