@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
             android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
-                            .setContentTitle("My notification")
-                            .setContentText("Hello World!");
+                            .setContentTitle(entry.toString())
+                            .setContentText("Please enter your current BG.");
 
             PendingIntent resultPendingIntent =
                     PendingIntent.getActivity(
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
             mBuilder.setContentIntent(resultPendingIntent);
 
-            scheduleNotification(mBuilder.build(), 10000);
+            scheduleNotification(mBuilder.build(), 10);
 
             UpdateDisplayedJournal();
         } else {
