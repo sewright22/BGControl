@@ -141,21 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
             mBuilder.setContentIntent(resultPendingIntent);
 
-
-            int mNotificationId = 001;
-// Gets an instance of the NotificationManager service
-            NotificationManager mNotifyMgr =
-                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-            //AlarmManager am = AlarmManager.
-
-            int delayInSeconds = 10;
-            long futureInMillis = SystemClock.elapsedRealtime() + delayInSeconds * 1000;
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, resultPendingIntent);
-
-            // Builds the notification and issues it.
-            //mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            scheduleNotification(mBuilder.build(), 10000);
 
             UpdateDisplayedJournal();
         } else {
@@ -163,6 +149,18 @@ public class MainActivity extends AppCompatActivity {
             journalEntries.updateJournalEntry(entry);
             UpdateDisplayedJournal();
         }
+    }
+
+    private void scheduleNotification(Notification notification, int delayInSeconds) {
+
+        Intent notificationIntent = new Intent(MainActivity.this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 001);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delayInSeconds * 1000;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
 
