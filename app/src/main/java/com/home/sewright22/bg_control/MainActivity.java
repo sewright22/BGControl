@@ -122,9 +122,6 @@ public class MainActivity extends AppCompatActivity {
             JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
             journalEntries.updateJournalEntry(entry, requestCode);
 
-            Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
-            parcelIntent.putExtra("item", entry);
-
             android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
@@ -135,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                     PendingIntent.getActivity(
                             this,
                             0,
-                            parcelIntent,
+                            data,
                             PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
@@ -176,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_2, android.R.id.text1, journalEntries.getJournalEntries());
 
         listView.setAdapter(adapter);
-        //final TextView textViewToChange = (TextView) findViewById(R.id.log);
-        //textViewToChange.setText(text.toString());
     }
 
     @Override
