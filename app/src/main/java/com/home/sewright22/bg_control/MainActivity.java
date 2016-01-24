@@ -118,48 +118,53 @@ public class MainActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.M)
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode + 1 <= journalEntries.getCount()) {
-                JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
-                journalEntries.updateJournalEntry(entry, requestCode);
+        if (resultCode == RESULT_OK) if (requestCode + 1 <= journalEntries.getCount()) {
+            JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
+            journalEntries.updateJournalEntry(entry, requestCode);
 
-                Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
-                parcelIntent.putExtra("item", entry);
+            Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
+            parcelIntent.putExtra("item", entry);
 
-                android.support.v4.app.NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(this)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setContentTitle("My notification")
-                                .setContentText("Hello World!");
+            android.support.v4.app.NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("My notification")
+                            .setContentText("Hello World!");
 
-                PendingIntent resultPendingIntent =
-                        PendingIntent.getActivity(
-                                this,
-                                0,
-                                parcelIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
+            PendingIntent resultPendingIntent =
+                    PendingIntent.getActivity(
+                            this,
+                            0,
+                            parcelIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
 
-                mBuilder.setContentIntent(resultPendingIntent);
+            mBuilder.setContentIntent(resultPendingIntent);
 
 
-                int mNotificationId = 001;
+            int mNotificationId = 001;
 // Gets an instance of the NotificationManager service
-                NotificationManager mNotifyMgr =
-                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationManager mNotifyMgr =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-                //AlarmManager am = AlarmManager.
-// Builds the notification and issues it.
-                mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            //AlarmManager am = AlarmManager.
 
-                UpdateDisplayedJournal();
-            } else {
-                JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
-                journalEntries.updateJournalEntry(entry);
-                UpdateDisplayedJournal();
-            }
+            int delayInSeconds = 10;
+            long futureInMillis = SystemClock.elapsedRealtime() + delayInSeconds * 1000;
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, resultPendingIntent);
+
+            // Builds the notification and issues it.
+            //mNotifyMgr.notify(mNotificationId, mBuilder.build());
+
+            UpdateDisplayedJournal();
+        } else {
+            JournalEntry entry = (JournalEntry) data.getExtras().getParcelable("item");
+            journalEntries.updateJournalEntry(entry);
+            UpdateDisplayedJournal();
         }
     }
+
 
     private void UpdateDisplayedJournal() {
         ListView listView = (ListView) findViewById(R.id.list);
@@ -217,3 +222,4 @@ public class MainActivity extends AppCompatActivity {
         client.disconnect();
     }
 }
+
