@@ -200,7 +200,6 @@ public class MainActivity extends AppCompatActivity
     {
         ListView listView = (ListView) findViewById(R.id.list);
         journalEntries.clear();
-        //insertTestRecord();
         Cursor cursor = mDbHelper.getAllEntries();
         cursor.moveToFirst();
 

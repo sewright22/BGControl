@@ -2,9 +2,11 @@ package com.home.sewright22.bg_control.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,10 +15,23 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.home.sewright22.bg_control.FoodRetrieval.FoodDbXmlParser;
+import com.home.sewright22.bg_control.FoodRetrieval.UrlBuilder;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.R;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
+import java.util.List;
 
 public class JournalEntryDetailsActivity extends AppCompatActivity
 {
@@ -169,6 +184,13 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         }
     }
 
+    public void searchFoodClicked(View view) {
+        EditText food = (EditText) findViewById(R.id.text_food);
+        String urlString = UrlBuilder.buildFoodSearchUrl(food.getText().toString());
+
+        new WebsiteRetriever().execute(urlString);
+    }
+
     private void saveData()
     {
         try
@@ -181,6 +203,8 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
             EditText text_extended_bolus = (EditText) findViewById(R.id.text_extended_bolus);
             EditText text_bolus_time = (EditText) findViewById(R.id.text_bolus_time);
             EditText text_finalBG = (EditText) findViewById(R.id.text_final_bg);
+
+
 
             entry.setFood(food.getText().toString());
             entry.setCarbCount(Integer.parseInt(text_carbs.getText().toString()));
@@ -212,6 +236,58 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         {
             setResult(Activity.RESULT_CANCELED);
             finish();
+        }
+    }
+
+    public class WebsiteRetriever extends AsyncTask<String, Void, String>
+    {
+        private Exception exception;
+
+        protected String doInBackground(String... urlString)
+        {
+            StringBuffer chaine = new StringBuffer("");
+            try
+            {
+                URL url = new URL(urlString[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("User-Agent", "");
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.connect();
+
+                InputStream inputStream = connection.getInputStream();
+
+                BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+                String line = "";
+                while ((line = rd.readLine()) != null)
+                {
+                    chaine.append(line);
+                }
+
+            }
+            catch (IOException e)
+            {
+                // writing exception to log
+                e.printStackTrace();
+            }
+
+            return chaine.toString();
+        }
+
+        protected void onPostExecute(String feed)
+        {
+            EditText text_carbs = (EditText) findViewById(R.id.text_carbs);
+            List<FoodDbXmlParser.FoodSearchResult> list;
+            InputStream stream = new ByteArrayInputStream(feed.getBytes(StandardCharsets.UTF_8));
+            FoodDbXmlParser parser = new FoodDbXmlParser();
+            try
+            {
+                list = parser.parse(stream);
+            }
+            catch(XmlPullParserException e){}
+            catch(IOException e){}
+
+            text_carbs.setText(feed.substring(0,10));
         }
     }
 

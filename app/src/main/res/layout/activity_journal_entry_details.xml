@@ -23,13 +23,22 @@
         android:layout_below="@id/text_start_time"
         android:hint="@string/hint_activity_journal_entry_details_food"/>
 
+    <Button
+        android:id="@+id/btn_search_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_food"
+        android:clickable="true"
+        android:onClick="searchFoodClicked"
+        android:text="Search Food"/>
+
     <EditText
         android:id="@+id/text_carbs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/text_food"
+        android:layout_below="@id/btn_search_food"
         android:hint="@string/hint_activity_journal_entry_details_carb_count"/>
 
 

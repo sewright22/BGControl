@@ -7,6 +7,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by steve on 1/22/2016.
@@ -97,14 +99,16 @@ public class JournalEntry implements Parcelable
 
     public void setTime(String date)
     {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM kk:mm:ss zzz yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Time = new Date();
         try
         {
             Time = dateFormat.parse(date);
         }
         catch(ParseException pe)
         {
-
+            pe.printStackTrace();
         }
     }
 
