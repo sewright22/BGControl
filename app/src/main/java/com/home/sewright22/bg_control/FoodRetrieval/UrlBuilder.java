@@ -12,7 +12,7 @@ public class UrlBuilder
     private static final String SEARCH_MAX = "&max=10";
     private static final String SEARCH_OFFSET = "&offset=0";
     private static final String SEARCH_FORMAT = "&format=xml";
-    private static final String SEARCH_NDBNO = "&nbdno=";
+    private static final String SEARCH_NDBNO = "ndbno=";
     private static final String SEARCH_NUTRIENT = "&nutrients=205";
 
     public static String buildFoodSearchUrl(String food)

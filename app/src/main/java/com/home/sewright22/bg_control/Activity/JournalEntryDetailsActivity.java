@@ -10,11 +10,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.home.sewright22.bg_control.FoodRetrieval.CarbDbXmlParser;
 import com.home.sewright22.bg_control.FoodRetrieval.FoodDbXmlParser;
 import com.home.sewright22.bg_control.FoodRetrieval.UrlBuilder;
 import com.home.sewright22.bg_control.Model.JournalEntry;
@@ -184,11 +187,31 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         }
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == RESULT_OK)
+        {
+            if(requestCode == 1)
+            {
+                EditText text_food = (EditText) findViewById(R.id.text_food);
+                String ndbno = data.getExtras().getString("ndbno");
+                String food = data.getExtras().getString("food");
+
+                text_food.setText(food);
+
+                String urlString = UrlBuilder.buildCarbSearchUrl(ndbno);
+                new WebsiteRetriever().execute(urlString);
+            }
+        }
+    }
+
     public void searchFoodClicked(View view) {
         EditText food = (EditText) findViewById(R.id.text_food);
-        String urlString = UrlBuilder.buildFoodSearchUrl(food.getText().toString());
 
-        new WebsiteRetriever().execute(urlString);
+
+        Intent intent = new Intent(JournalEntryDetailsActivity.this, FoodListResultActivity.class);
+        intent.putExtra("SearchString", food.getText().toString());
+        startActivityForResult(intent, 1);
     }
 
     private void saveData()
@@ -203,7 +226,6 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
             EditText text_extended_bolus = (EditText) findViewById(R.id.text_extended_bolus);
             EditText text_bolus_time = (EditText) findViewById(R.id.text_bolus_time);
             EditText text_finalBG = (EditText) findViewById(R.id.text_final_bg);
-
 
 
             entry.setFood(food.getText().toString());
@@ -276,18 +298,21 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
 
         protected void onPostExecute(String feed)
         {
+            String retVal;
             EditText text_carbs = (EditText) findViewById(R.id.text_carbs);
-            List<FoodDbXmlParser.FoodSearchResult> list;
             InputStream stream = new ByteArrayInputStream(feed.getBytes(StandardCharsets.UTF_8));
-            FoodDbXmlParser parser = new FoodDbXmlParser();
+            CarbDbXmlParser parser = new CarbDbXmlParser();
             try
             {
-                list = parser.parse(stream);
+                retVal = parser.parse(stream);
+                text_carbs.setText(retVal.toString());
             }
-            catch(XmlPullParserException e){}
-            catch(IOException e){}
-
-            text_carbs.setText(feed.substring(0,10));
+            catch (XmlPullParserException e)
+            {
+            }
+            catch (IOException e)
+            {
+            }
         }
     }
 

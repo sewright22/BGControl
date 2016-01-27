@@ -34,7 +34,7 @@ public class FoodDbXmlParser
         }
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException
+    private List<FoodSearchResult> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException
     {
         List entries = new ArrayList();
 
