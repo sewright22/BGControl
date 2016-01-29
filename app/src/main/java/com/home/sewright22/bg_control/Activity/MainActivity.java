@@ -18,7 +18,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -31,7 +33,7 @@ import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.NotificationPublisher;
 import com.home.sewright22.bg_control.R;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements AdapterView.OnClickListener
 {
     private JournalEntryDbHelper mDbHelper;
     private JournalEntryList journalEntries = new JournalEntryList();
@@ -54,45 +56,10 @@ public class MainActivity extends AppCompatActivity
         UpdateDisplayedJournal();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
+        fab.setOnClickListener(this);
 
-                JournalEntry itemValue = new JournalEntry();
+        listView.setOnItemClickListener(new ListViewItemClickListener());
 
-                parcelIntent.putExtra("item", itemValue);
-
-                startActivityForResult(parcelIntent, journalEntries.getCount() + 1);
-            }
-        });
-
-        // ListView Item Click Listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id)
-            {
-
-                Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
-
-                int itemPosition = position;
-
-                ListView listView = (ListView) findViewById(R.id.list);
-
-                // ListView Clicked item value
-                JournalEntry itemValue = (JournalEntry) listView.getItemAtPosition(itemPosition);
-
-                parcelIntent.putExtra("item", itemValue);
-
-                startActivityForResult(parcelIntent, itemPosition);
-            }
-
-        });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -149,8 +116,7 @@ public class MainActivity extends AppCompatActivity
     private void createBloodSugarReminder(JournalEntry entry)
     {
         android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(entry.toString())
                         .setContentText("Please enter your current BG.");
 
@@ -172,7 +138,6 @@ public class MainActivity extends AppCompatActivity
 
     private void scheduleNotification(Notification notification, int delayInSeconds)
     {
-
         Intent notificationIntent = new Intent(MainActivity.this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 001);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
@@ -189,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         first.setFood("Cake");
         first.setCarbCount(24);
         first.setStartingBG(123);
-       first.setInitialBolus(2);
+        first.setInitialBolus(2);
         first.setBolus_Type(R.integer.bolus_instant);
         JournalEntryDbHelper mDbHelper = new JournalEntryDbHelper(this);
         mDbHelper.insertJournalEntry(first);
@@ -203,7 +168,7 @@ public class MainActivity extends AppCompatActivity
         Cursor cursor = mDbHelper.getAllEntries();
         cursor.moveToFirst();
 
-        while(cursor.isAfterLast() == false)
+        while (cursor.isAfterLast() == false)
         {
             JournalEntry entry = new JournalEntry();
             String date = cursor.getString(1);
@@ -224,9 +189,9 @@ public class MainActivity extends AppCompatActivity
         // Third parameter - ID of the TextView to which the data is written
         // Forth - the Array of data
         ArrayAdapter<JournalEntry> adapter = new ArrayAdapter<JournalEntry>(this,
-                                                                            android.R.layout.simple_list_item_2,
-                                                                            android.R.id.text1,
-                                                                            journalEntries.getJournalEntries());
+                                                                 android.R.layout.simple_list_item_2,
+                                                                 android.R.id.text1,
+                                                                 journalEntries.getJournalEntries());
 
         listView.setAdapter(adapter);
     }
@@ -271,6 +236,48 @@ public class MainActivity extends AppCompatActivity
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        int viewID = v.getId();
+
+        switch (viewID)
+        {
+            case R.id.fab:
+                Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
+
+                JournalEntry itemValue = new JournalEntry();
+
+                parcelIntent.putExtra("item", itemValue);
+
+                startActivityForResult(parcelIntent, journalEntries.getCount() + 1);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private class ListViewItemClickListener implements OnItemClickListener
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view,
+                            int position, long id)
+        {
+            Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
+
+            int itemPosition = position;
+
+            ListView listView = (ListView) findViewById(R.id.list);
+
+            // ListView Clicked item value
+            JournalEntry itemValue = (JournalEntry) listView.getItemAtPosition(itemPosition);
+
+            parcelIntent.putExtra("item", itemValue);
+
+            startActivityForResult(parcelIntent, itemPosition);
+        }
     }
 }
 
