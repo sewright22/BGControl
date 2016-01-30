@@ -44,7 +44,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
             JournalEntryTable.COLUMN_NAME_BOLUS_TYPE + INTEGER_TYPE + COMMA_SEP +
             JournalEntryTable.COLUMN_NAME_INITIAL_BOLUS + TEXT_TYPE + COMMA_SEP +
             JournalEntryTable.COLUMN_NAME_EXTENDED_BOLUS + TEXT_TYPE + COMMA_SEP +
-            JournalEntryTable.COLUMN_NAME_BOLUS_TIME + INTEGER_TYPE  + " )";
+            JournalEntryTable.COLUMN_NAME_BOLUS_TIME + INTEGER_TYPE + " )";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + JournalEntryTable.TABLE_NAME;
 
@@ -92,9 +92,10 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         return true;
     }
 
-    public Cursor getAllEntries() {
+    public Cursor getAllEntries()
+    {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "SELECT * FROM " + JournalEntryTable.TABLE_NAME, null );
+        Cursor res = db.rawQuery("SELECT * FROM " + JournalEntryTable.TABLE_NAME, null);
         return res;
     }
 }

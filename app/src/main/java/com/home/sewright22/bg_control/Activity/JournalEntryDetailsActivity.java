@@ -6,19 +6,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.home.sewright22.bg_control.FoodRetrieval.CarbDbXmlParser;
-import com.home.sewright22.bg_control.FoodRetrieval.FoodDbXmlParser;
 import com.home.sewright22.bg_control.FoodRetrieval.UrlBuilder;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.R;
@@ -34,9 +30,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
-import java.util.List;
 
-public class JournalEntryDetailsActivity extends AppCompatActivity
+public class JournalEntryDetailsActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener
 {
 
     private JournalEntry entry;
@@ -105,40 +100,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
 
         RadioGroup radGrp = (RadioGroup) findViewById(R.id.rad_grp);
 
-        radGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(RadioGroup arg0, int id)
-            {
-                EditText initial = (EditText) findViewById(R.id.text_inital_bolus);
-                EditText extend = (EditText) findViewById(R.id.text_extended_bolus);
-                EditText bolus_time = (EditText) findViewById(R.id.text_bolus_time);
-                switch (id)
-                {
-                    case -1:
-                        break;
-                    case R.id.rad_instant:
-                        initial.setVisibility(View.VISIBLE);
-                        extend.setVisibility(View.GONE);
-                        bolus_time.setVisibility(View.GONE);
-                        entry.setBolus_Type(R.integer.bolus_instant);
-                        break;
-                    case R.id.rad_square:
-                        initial.setVisibility(View.GONE);
-                        extend.setVisibility(View.VISIBLE);
-                        bolus_time.setVisibility(View.VISIBLE);
-                        entry.setBolus_Type(R.integer.bolus_extended);
-                        break;
-                    case R.id.rad_dual_wave:
-                        initial.setVisibility(View.VISIBLE);
-                        extend.setVisibility(View.VISIBLE);
-                        bolus_time.setVisibility(View.VISIBLE);
-                        entry.setBolus_Type(R.integer.bolus_dual_wave);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        radGrp.setOnCheckedChangeListener(this);
 
         if (entry.getBolus_Type() == R.integer.bolus_instant)
         {
@@ -187,11 +149,46 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         }
     }
 
+    //BolusType check changed.
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId)
+    {
+        int id = checkedId;
+        EditText initial = (EditText) findViewById(R.id.text_inital_bolus);
+        EditText extend = (EditText) findViewById(R.id.text_extended_bolus);
+        EditText bolus_time = (EditText) findViewById(R.id.text_bolus_time);
+        switch (id)
+        {
+            case -1:
+                break;
+            case R.id.rad_instant:
+                initial.setVisibility(View.VISIBLE);
+                extend.setVisibility(View.GONE);
+                bolus_time.setVisibility(View.GONE);
+                entry.setBolus_Type(R.integer.bolus_instant);
+                break;
+            case R.id.rad_square:
+                initial.setVisibility(View.GONE);
+                extend.setVisibility(View.VISIBLE);
+                bolus_time.setVisibility(View.VISIBLE);
+                entry.setBolus_Type(R.integer.bolus_extended);
+                break;
+            case R.id.rad_dual_wave:
+                initial.setVisibility(View.VISIBLE);
+                extend.setVisibility(View.VISIBLE);
+                bolus_time.setVisibility(View.VISIBLE);
+                entry.setBolus_Type(R.integer.bolus_dual_wave);
+                break;
+            default:
+                break;
+        }
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (resultCode == RESULT_OK)
         {
-            if(requestCode == 1)
+            if (requestCode == 1)
             {
                 EditText text_food = (EditText) findViewById(R.id.text_food);
                 String ndbno = data.getExtras().getString("ndbno");
@@ -205,7 +202,8 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         }
     }
 
-    public void searchFoodClicked(View view) {
+    public void searchFoodClicked(View view)
+    {
         EditText food = (EditText) findViewById(R.id.text_food);
 
 
