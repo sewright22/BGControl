@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Activity.JournalEntryDetailsActivity">
+    tools:context=".Activity.JournalEntryDetailsFinalBG_Activity">
 
     <TextView
         android:id="@+id/text_start_time"
@@ -40,6 +40,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/btn_search_food"
         android:hint="@string/hint_activity_journal_entry_details_carb_count"/>
+
 
     <EditText
         android:id="@+id/text_starting_bg"

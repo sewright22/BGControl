@@ -41,6 +41,11 @@
             android:label="@string/title_activity_food_list_result"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".Activity.CreateNewJournalEntryActivity"
+            android:label="@string/title_activity_create_new_journal_entry"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

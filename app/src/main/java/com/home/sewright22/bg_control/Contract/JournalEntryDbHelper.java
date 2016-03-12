@@ -76,7 +76,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public boolean insertJournalEntry(JournalEntry entry)
+    public long insertJournalEntry(JournalEntry entry)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -88,8 +88,8 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         contentValues.put(JournalEntryTable.COLUMN_NAME_INITIAL_BOLUS, entry.getInitialBolus());
         contentValues.put(JournalEntryTable.COLUMN_NAME_EXTENDED_BOLUS, entry.getExtendedBolus());
         contentValues.put(JournalEntryTable.COLUMN_NAME_BOLUS_TIME, entry.getBolus_Time());
-        db.insert(JournalEntryTable.TABLE_NAME, null, contentValues);
-        return true;
+        long retVal = db.insert(JournalEntryTable.TABLE_NAME, null, contentValues);
+        return retVal;
     }
 
     public Cursor getAllEntries()
@@ -97,5 +97,33 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT * FROM " + JournalEntryTable.TABLE_NAME, null);
         return res;
+    }
+
+    public JournalEntry getSpecificEntry(int pk)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + JournalEntryTable.TABLE_NAME + " WHERE _ID=" + pk, null);
+
+        cursor.moveToFirst();
+
+        JournalEntry entry = new JournalEntry();
+
+        if (cursor.isAfterLast() == false)
+        {
+
+            entry.set_id(cursor.getInt(0));
+            String date = cursor.getString(1);
+            entry.setTime(date);
+            entry.setFood(cursor.getString(2));
+            entry.setCarbCount(cursor.getInt(3));
+            entry.setStartingBG(cursor.getInt(4));
+            entry.setBolus_Type(cursor.getInt(5));
+            entry.setInitialBolus(cursor.getDouble(6));
+            entry.setExtendedBolus(cursor.getDouble(7));
+            entry.setBolus_Time(cursor.getInt(8));
+            cursor.moveToNext();
+        }
+
+        return entry;
     }
 }

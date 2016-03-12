@@ -32,7 +32,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 
-public class JournalEntryDetailsActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener
+public class CreateNewJournalEntryActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener
 {
     private JournalEntryDbHelper mDbHelper;
     private JournalEntry entry;
@@ -41,7 +41,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_journal_entry_details);
+        setContentView(R.layout.activity_create_new_journal_entry);
         mDbHelper = new JournalEntryDbHelper(this);
         entry = (JournalEntry) getIntent().getExtras().getParcelable("item");
         TextView time = (TextView) findViewById(R.id.text_start_time);
@@ -125,6 +125,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+        super.onCreateOptionsMenu(menu);
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_details, menu);
         return true;
@@ -138,7 +139,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
             case R.id.action_save:
                 saveData();
                 mDbHelper.insertJournalEntry(entry);
-                Intent parcelIntent = new Intent(JournalEntryDetailsActivity.this, MainActivity.class);
+                Intent parcelIntent = new Intent(CreateNewJournalEntryActivity.this, MainActivity.class);
                 setResult(Activity.RESULT_OK, parcelIntent);
                 finish();
                 return true;
@@ -208,7 +209,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
         EditText food = (EditText) findViewById(R.id.text_food);
 
 
-        Intent intent = new Intent(JournalEntryDetailsActivity.this, FoodListResultActivity.class);
+        Intent intent = new Intent(CreateNewJournalEntryActivity.this, FoodListResultActivity.class);
         intent.putExtra("SearchString", food.getText().toString());
         startActivityForResult(intent, 1);
     }
@@ -314,5 +315,4 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
             }
         }
     }
-
 }

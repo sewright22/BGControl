@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
         while (cursor.isAfterLast() == false)
         {
             JournalEntry entry = new JournalEntry();
+            entry.set_id(cursor.getInt(0));
             String date = cursor.getString(1);
             entry.setTime(date);
             entry.setFood(cursor.getString(2));
@@ -246,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
         switch (viewID)
         {
             case R.id.fab:
-                Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
+                Intent parcelIntent = new Intent(MainActivity.this, CreateNewJournalEntryActivity.class);
 
                 JournalEntry itemValue = new JournalEntry();
 

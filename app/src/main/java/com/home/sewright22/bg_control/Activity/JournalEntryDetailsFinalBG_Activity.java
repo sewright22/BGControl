@@ -14,7 +14,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
 import com.home.sewright22.bg_control.FoodRetrieval.CarbDbXmlParser;
 import com.home.sewright22.bg_control.FoodRetrieval.UrlBuilder;
 import com.home.sewright22.bg_control.Model.JournalEntry;
@@ -32,9 +31,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 
-public class JournalEntryDetailsActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener
+public class JournalEntryDetailsFinalBG_Activity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener
 {
-    private JournalEntryDbHelper mDbHelper;
+
     private JournalEntry entry;
 
     @Override
@@ -42,7 +41,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_entry_details);
-        mDbHelper = new JournalEntryDbHelper(this);
+
         entry = (JournalEntry) getIntent().getExtras().getParcelable("item");
         TextView time = (TextView) findViewById(R.id.text_start_time);
         EditText food = (EditText) findViewById(R.id.text_food);
@@ -137,8 +136,8 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
         {
             case R.id.action_save:
                 saveData();
-                mDbHelper.insertJournalEntry(entry);
-                Intent parcelIntent = new Intent(JournalEntryDetailsActivity.this, MainActivity.class);
+                Intent parcelIntent = new Intent(JournalEntryDetailsFinalBG_Activity.this, MainActivity.class);
+                parcelIntent.putExtra("item", entry);
                 setResult(Activity.RESULT_OK, parcelIntent);
                 finish();
                 return true;
@@ -208,7 +207,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
         EditText food = (EditText) findViewById(R.id.text_food);
 
 
-        Intent intent = new Intent(JournalEntryDetailsActivity.this, FoodListResultActivity.class);
+        Intent intent = new Intent(JournalEntryDetailsFinalBG_Activity.this, FoodListResultActivity.class);
         intent.putExtra("SearchString", food.getText().toString());
         startActivityForResult(intent, 1);
     }

@@ -11,4 +11,5 @@
     <string name="hint_activity_journal_entry_details_extended_bolus">Extended Bolus (units)</string>
     <string name="hint_activity_journal_entry_details_bolus_time">Time (minutes)</string>
     <string name="title_activity_food_list_result">FoodListResultActivity</string>
+    <string name="title_activity_create_new_journal_entry">CreateNewJournalEntryActivity</string>
 </resources>

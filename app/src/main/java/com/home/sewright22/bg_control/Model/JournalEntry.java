@@ -15,6 +15,7 @@ import java.util.TimeZone;
  */
 public class JournalEntry implements Parcelable
 {
+    private int _id;
     private int StartingBG;
     private int FinalBG;
     private double InitialBolus;
@@ -110,6 +111,16 @@ public class JournalEntry implements Parcelable
         {
             pe.printStackTrace();
         }
+    }
+
+    public void set_id(int _id)
+    {
+        this._id = _id;
+    }
+
+    public int get_id()
+    {
+        return _id;
     }
 
     public int getBolus_Type()
