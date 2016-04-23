@@ -1,4 +1,4 @@
-package com.home.sewright22.bg_control;
+package com.home.sewright22.bg_control.BroadcastReceiver;
 
 import android.app.Notification;
 import android.app.NotificationManager;

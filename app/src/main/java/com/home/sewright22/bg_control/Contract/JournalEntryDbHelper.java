@@ -9,6 +9,14 @@ import android.provider.BaseColumns;
 
 import com.home.sewright22.bg_control.Model.JournalEntry;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 /**
  * Created by steve on 1/24/2016.
  */
@@ -25,8 +33,15 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         public static final String COLUMN_NAME_INITIAL_BOLUS = "initial_bolus";
         public static final String COLUMN_NAME_EXTENDED_BOLUS = "extended_bolus";
         public static final String COLUMN_NAME_BOLUS_TIME = "bolus_time";
-        public static final String COLUMN_NAME_FINAL_BG = "final_bg";
         public static final String COLUMN_NAME_TIME_ELAPSED = "time_elapsed";
+    }
+
+    public static abstract class JournalEntryFinal_BG_Table implements BaseColumns
+    {
+        public static final String TABLE_NAME = "journal_entry_final_bg";
+        public static final String COLUMN_NAME_JOURNAL_ENTRY_ID = "journal_entry_id";
+        public static final String COLUMN_NAME_GLUCOSE_READING = "final_reading";
+        public static final String COLUMN_NAME_READING_TIME = "reading_time";
     }
 
     private static final String TEXT_TYPE = " TEXT";
@@ -90,6 +105,34 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         contentValues.put(JournalEntryTable.COLUMN_NAME_BOLUS_TIME, entry.getBolus_Time());
         long retVal = db.insert(JournalEntryTable.TABLE_NAME, null, contentValues);
         return retVal;
+    }
+
+    public long insertFinalReading(int journalEntryID, double reading)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(JournalEntryFinal_BG_Table.COLUMN_NAME_JOURNAL_ENTRY_ID, journalEntryID);
+        contentValues.put(JournalEntryFinal_BG_Table.COLUMN_NAME_GLUCOSE_READING, reading);
+        contentValues.put(JournalEntryFinal_BG_Table.COLUMN_NAME_READING_TIME, getCurrentTime());
+        long retVal = db.insert(JournalEntryFinal_BG_Table.TABLE_NAME, null, contentValues);
+        return retVal;
+    }
+
+    private String getCurrentTime()
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date Time = new Date();
+        try
+        {
+            Time = dateFormat.parse(Calendar.getInstance().getTime().toString());
+        }
+        catch (ParseException pe)
+        {
+            pe.printStackTrace();
+        }
+
+        return Time.toString();
     }
 
     public Cursor getAllEntries()

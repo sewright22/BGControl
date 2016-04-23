@@ -16,16 +16,22 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".Activity.JournalEntryDetailsActivity"/>
+        <activity android:name=".Activity.CreateNewJournalEntryActivity"/>
 
-        <receiver android:name=".NotificationPublisher">
+        <receiver android:name=".BroadcastReceiver.NotificationPublisher">
             <intent-filter>
                 <action android:name="com.home.sewright22.bg_control">
                 </action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".Activity.MainActivity$MyBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.eveningoutpost.dexdrip.permissions.RECEIVE_BG_ESTIMATE" />
             </intent-filter>
         </receiver>
         <!--
@@ -39,11 +45,6 @@
         <activity
             android:name=".Activity.FoodListResultActivity"
             android:label="@string/title_activity_food_list_result"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".Activity.CreateNewJournalEntryActivity"
-            android:label="@string/title_activity_create_new_journal_entry"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

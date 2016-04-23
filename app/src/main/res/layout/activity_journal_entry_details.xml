@@ -16,32 +16,22 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <EditText
+    <TextView
         android:id="@+id/text_food"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_start_time"
         android:hint="@string/hint_activity_journal_entry_details_food"/>
 
-    <Button
-        android:id="@+id/btn_search_food"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_food"
-        android:clickable="true"
-        android:onClick="searchFoodClicked"
-        android:text="Search Food"/>
-
-    <EditText
+    <TextView
         android:id="@+id/text_carbs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/btn_search_food"
-        android:hint="@string/hint_activity_journal_entry_details_carb_count"/>
+        android:layout_below="@id/text_food"/>
 
-    <EditText
+    <TextView
         android:id="@+id/text_starting_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,35 +74,30 @@
 
     </RadioGroup>
 
-    <EditText
+    <TextView
         android:id="@+id/text_inital_bolus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
         android:layout_below="@id/rad_grp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:visibility="gone"
-        android:digits="0123456789."
         android:hint="@string/hint_activity_journal_entry_details_inital_bolus"/>
 
-    <EditText
+    <TextView
         android:id="@+id/text_extended_bolus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
         android:layout_below="@id/text_inital_bolus"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:digits="0123456789."
         android:visibility="gone"
         android:hint="@string/hint_activity_journal_entry_details_extended_bolus"/>
 
-    <EditText
+    <TextView
         android:id="@+id/text_bolus_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
         android:layout_below="@id/text_extended_bolus"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -123,8 +108,8 @@
         android:id="@+id/text_final_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Final BG"
-        android:visibility="gone"
-        android:layout_below="@id/text_bolus_time"/>
+        android:visibility="visible"
+        android:layout_below="@id/text_bolus_time"
+        android:hint="Final BG"/>
 
 </RelativeLayout>

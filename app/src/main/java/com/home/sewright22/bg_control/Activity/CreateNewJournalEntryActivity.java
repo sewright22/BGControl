@@ -44,14 +44,14 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_create_new_journal_entry);
         mDbHelper = new JournalEntryDbHelper(this);
         entry = (JournalEntry) getIntent().getExtras().getParcelable("item");
-        TextView time = (TextView) findViewById(R.id.text_start_time);
-        EditText food = (EditText) findViewById(R.id.text_food);
-        EditText text_carbs = (EditText) findViewById(R.id.text_carbs);
-        EditText text_bg = (EditText) findViewById(R.id.text_starting_bg);
-        EditText text_inital_bolus = (EditText) findViewById(R.id.text_inital_bolus);
-        EditText text_finalBG = (EditText) findViewById(R.id.text_final_bg);
-        EditText text_extended_bolus = (EditText) findViewById(R.id.text_extended_bolus);
-        EditText text_bolus_time = (EditText) findViewById(R.id.text_bolus_time);
+        TextView time = (TextView) findViewById(R.id.text_new_start_time);
+        EditText food = (EditText) findViewById(R.id.text_new_food);
+        EditText text_carbs = (EditText) findViewById(R.id.text_new_carbs);
+        EditText text_bg = (EditText) findViewById(R.id.text_new_starting_bg);
+        EditText text_inital_bolus = (EditText) findViewById(R.id.text_new_inital_bolus);
+        EditText text_finalBG = (EditText) findViewById(R.id.text_new_final_bg);
+        EditText text_extended_bolus = (EditText) findViewById(R.id.text_new_extended_bolus);
+        EditText text_bolus_time = (EditText) findViewById(R.id.text_new_bolus_time);
 
         food.setInputType(InputType.TYPE_CLASS_TEXT);
         text_carbs.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -186,7 +186,7 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
         }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    /*protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (resultCode == RESULT_OK)
         {
@@ -212,7 +212,7 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
         Intent intent = new Intent(CreateNewJournalEntryActivity.this, FoodListResultActivity.class);
         intent.putExtra("SearchString", food.getText().toString());
         startActivityForResult(intent, 1);
-    }
+    }*/
 
     private void saveData()
     {

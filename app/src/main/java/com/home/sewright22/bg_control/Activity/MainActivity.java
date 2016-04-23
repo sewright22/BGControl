@@ -4,8 +4,10 @@ import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -18,11 +20,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -30,13 +32,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
 import com.home.sewright22.bg_control.Model.JournalEntryList;
 import com.home.sewright22.bg_control.Model.JournalEntry;
-import com.home.sewright22.bg_control.NotificationPublisher;
+import com.home.sewright22.bg_control.BroadcastReceiver.NotificationPublisher;
 import com.home.sewright22.bg_control.R;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnClickListener
 {
     private JournalEntryDbHelper mDbHelper;
     private JournalEntryList journalEntries = new JournalEntryList();
+    private MyBroadcastReceiver MyReceiver;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -59,6 +62,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
         fab.setOnClickListener(this);
 
         listView.setOnItemClickListener(new ListViewItemClickListener());
+
+        IntentFilter intentFilter= new IntentFilter("com.eveningoutpost.dexdrip.permissions.RECEIVE_BG_ESTIMATE");
+        MyReceiver = new MyBroadcastReceiver();
+
+        if(intentFilter!=null)
+        {
+            registerReceiver(MyReceiver,intentFilter);
+        }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -279,6 +290,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
 
             startActivityForResult(parcelIntent, itemPosition);
         }
+    }
+
+    public class MyBroadcastReceiver extends BroadcastReceiver
+    {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+
+
+            Toast.makeText(MainActivity.this, "Data Received from External App", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        if(MyReceiver!= null)
+            unregisterReceiver(MyReceiver);;
     }
 }
 

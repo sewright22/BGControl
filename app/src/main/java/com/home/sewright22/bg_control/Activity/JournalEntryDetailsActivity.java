@@ -45,19 +45,13 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
         mDbHelper = new JournalEntryDbHelper(this);
         entry = (JournalEntry) getIntent().getExtras().getParcelable("item");
         TextView time = (TextView) findViewById(R.id.text_start_time);
-        EditText food = (EditText) findViewById(R.id.text_food);
-        EditText text_carbs = (EditText) findViewById(R.id.text_carbs);
-        EditText text_bg = (EditText) findViewById(R.id.text_starting_bg);
-        EditText text_inital_bolus = (EditText) findViewById(R.id.text_inital_bolus);
+        TextView food = (TextView) findViewById(R.id.text_food);
+        TextView text_carbs = (TextView) findViewById(R.id.text_carbs);
+        TextView text_bg = (TextView) findViewById(R.id.text_starting_bg);
+        TextView text_inital_bolus = (TextView) findViewById(R.id.text_inital_bolus);
         EditText text_finalBG = (EditText) findViewById(R.id.text_final_bg);
-        EditText text_extended_bolus = (EditText) findViewById(R.id.text_extended_bolus);
-        EditText text_bolus_time = (EditText) findViewById(R.id.text_bolus_time);
-
-        food.setInputType(InputType.TYPE_CLASS_TEXT);
-        text_carbs.setInputType(InputType.TYPE_CLASS_NUMBER);
-        text_bg.setInputType(InputType.TYPE_CLASS_NUMBER);
-        text_finalBG.setInputType(InputType.TYPE_CLASS_NUMBER);
-        text_finalBG.setVisibility(View.VISIBLE);
+        TextView text_extended_bolus = (TextView) findViewById(R.id.text_extended_bolus);
+        TextView text_bolus_time = (TextView) findViewById(R.id.text_bolus_time);
 
         time.setText(DateFormat.getTimeInstance().format(entry.getStartTime()));
         food.setText(entry.getFood());
@@ -155,9 +149,9 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
     public void onCheckedChanged(RadioGroup group, int checkedId)
     {
         int id = checkedId;
-        EditText initial = (EditText) findViewById(R.id.text_inital_bolus);
-        EditText extend = (EditText) findViewById(R.id.text_extended_bolus);
-        EditText bolus_time = (EditText) findViewById(R.id.text_bolus_time);
+        TextView initial = (TextView) findViewById(R.id.text_inital_bolus);
+        TextView extend = (TextView) findViewById(R.id.text_extended_bolus);
+        TextView bolus_time = (TextView) findViewById(R.id.text_bolus_time);
         switch (id)
         {
             case -1:
