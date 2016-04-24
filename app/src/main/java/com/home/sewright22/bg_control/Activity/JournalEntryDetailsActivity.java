@@ -43,7 +43,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_entry_details);
         mDbHelper = new JournalEntryDbHelper(this);
-        entry = (JournalEntry) getIntent().getExtras().getParcelable("item");
+        int entryID = getIntent().getExtras().getInt("id");
         TextView time = (TextView) findViewById(R.id.text_start_time);
         TextView food = (TextView) findViewById(R.id.text_food);
         TextView text_carbs = (TextView) findViewById(R.id.text_carbs);
@@ -53,6 +53,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity implements Ra
         TextView text_extended_bolus = (TextView) findViewById(R.id.text_extended_bolus);
         TextView text_bolus_time = (TextView) findViewById(R.id.text_bolus_time);
 
+        entry = mDbHelper.getSpecificEntry(entryID);
         time.setText(DateFormat.getTimeInstance().format(entry.getStartTime()));
         food.setText(entry.getFood());
 

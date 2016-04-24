@@ -1,17 +1,22 @@
 package com.home.sewright22.bg_control.Activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
@@ -36,6 +41,7 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
 {
     private JournalEntryDbHelper mDbHelper;
     private JournalEntry entry;
+    private String m_text = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,83 +49,59 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_journal_entry);
         mDbHelper = new JournalEntryDbHelper(this);
-        entry = (JournalEntry) getIntent().getExtras().getParcelable("item");
+        entry = new JournalEntry();
         TextView time = (TextView) findViewById(R.id.text_new_start_time);
-        EditText food = (EditText) findViewById(R.id.text_new_food);
+        Spinner food = (Spinner) findViewById(R.id.text_new_food);
         EditText text_carbs = (EditText) findViewById(R.id.text_new_carbs);
         EditText text_bg = (EditText) findViewById(R.id.text_new_starting_bg);
-        EditText text_inital_bolus = (EditText) findViewById(R.id.text_new_inital_bolus);
-        EditText text_finalBG = (EditText) findViewById(R.id.text_new_final_bg);
-        EditText text_extended_bolus = (EditText) findViewById(R.id.text_new_extended_bolus);
-        EditText text_bolus_time = (EditText) findViewById(R.id.text_new_bolus_time);
+        Button btn_addFood = (Button) findViewById(R.id.btn_new_add_food);
 
-        food.setInputType(InputType.TYPE_CLASS_TEXT);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                                                                android.R.layout.simple_spinner_item, mDbHelper.getAllFoods());
+        food.setAdapter(adapter);
+        //food.setInputType(InputType.TYPE_CLASS_TEXT);
         text_carbs.setInputType(InputType.TYPE_CLASS_NUMBER);
         text_bg.setInputType(InputType.TYPE_CLASS_NUMBER);
-        text_finalBG.setInputType(InputType.TYPE_CLASS_NUMBER);
-        text_finalBG.setVisibility(View.VISIBLE);
 
         time.setText(DateFormat.getTimeInstance().format(entry.getStartTime()));
-        food.setText(entry.getFood());
-
-        if (entry.getCarbs() > 0)
-        {
-            text_carbs.setText(String.valueOf(entry.getCarbs()));
-            text_carbs.setEnabled(false);
-        }
-
-        if (entry.getStartingBG() > 0)
-        {
-            text_bg.setText(String.valueOf(entry.getStartingBG()));
-            text_bg.setEnabled(false);
-        }
-
-        if (entry.getInitialBolus() > 0)
-        {
-            text_inital_bolus.setText(String.valueOf(entry.getInitialBolus()));
-            text_inital_bolus.setEnabled(false);
-        }
-
-        if (entry.getExtendedBolus() > 0)
-        {
-            text_extended_bolus.setText(String.valueOf(entry.getExtendedBolus()));
-            text_extended_bolus.setEnabled(false);
-        }
-
-        if (entry.getBolus_Time() > 0)
-        {
-            text_bolus_time.setText(String.valueOf(entry.getBolus_Time()));
-            text_bolus_time.setEnabled(false);
-        }
-
-        if (entry.getFinalBG() > 0)
-        {
-            text_finalBG.setText(String.valueOf(entry.getFinalBG()));
-            text_finalBG.setEnabled(false);
-        }
-
 
         RadioGroup radGrp = (RadioGroup) findViewById(R.id.rad_grp);
 
+        btn_addFood.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateNewJournalEntryActivity.this);
+                builder.setTitle("Title");
+
+
+// Set up the input
+                final EditText input = new EditText(CreateNewJournalEntryActivity.this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+// Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        JournalEntryDbHelper mDbHelper = new JournalEntryDbHelper(CreateNewJournalEntryActivity.this);
+                        mDbHelper.insertFood(input.getText().toString());
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
         radGrp.setOnCheckedChangeListener(this);
-
-        if (entry.getBolus_Type() == R.integer.bolus_instant)
-        {
-            RadioButton initial = (RadioButton) findViewById(R.id.rad_instant);
-            initial.setChecked(true);
-        }
-        else if (entry.getBolus_Type() == R.integer.bolus_extended)
-        {
-            RadioButton extended = (RadioButton) findViewById(R.id.rad_square);
-            extended.setChecked(true);
-        }
-        else if (entry.getBolus_Type() == R.integer.bolus_dual_wave)
-        {
-            RadioButton dual = (RadioButton) findViewById(R.id.rad_dual_wave);
-            dual.setChecked(true);
-        }
-
-        //time.setText(DateFormat.getTimeInstance().format(entry.getStartTime()));
     }
 
     @Override
@@ -156,9 +138,9 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
     public void onCheckedChanged(RadioGroup group, int checkedId)
     {
         int id = checkedId;
-        EditText initial = (EditText) findViewById(R.id.text_inital_bolus);
-        EditText extend = (EditText) findViewById(R.id.text_extended_bolus);
-        EditText bolus_time = (EditText) findViewById(R.id.text_bolus_time);
+        EditText initial = (EditText) findViewById(R.id.text_new_inital_bolus);
+        EditText extend = (EditText) findViewById(R.id.text_new_extended_bolus);
+        EditText bolus_time = (EditText) findViewById(R.id.text_new_bolus_time);
         switch (id)
         {
             case -1:
@@ -218,17 +200,15 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
     {
         try
         {
-            TextView time = (TextView) findViewById(R.id.text_start_time);
-            EditText food = (EditText) findViewById(R.id.text_food);
-            EditText text_carbs = (EditText) findViewById(R.id.text_carbs);
-            EditText text_bg = (EditText) findViewById(R.id.text_starting_bg);
-            EditText text_inital_bolus = (EditText) findViewById(R.id.text_inital_bolus);
-            EditText text_extended_bolus = (EditText) findViewById(R.id.text_extended_bolus);
-            EditText text_bolus_time = (EditText) findViewById(R.id.text_bolus_time);
-            EditText text_finalBG = (EditText) findViewById(R.id.text_final_bg);
+            TextView time = (TextView) findViewById(R.id.text_new_start_time);
+            Spinner food = (Spinner) findViewById(R.id.text_new_food);
+            EditText text_carbs = (EditText) findViewById(R.id.text_new_carbs);
+            EditText text_bg = (EditText) findViewById(R.id.text_new_starting_bg);
+            EditText text_inital_bolus = (EditText) findViewById(R.id.text_new_inital_bolus);
+            EditText text_extended_bolus = (EditText) findViewById(R.id.text_new_extended_bolus);
+            EditText text_bolus_time = (EditText) findViewById(R.id.text_new_bolus_time);
 
-
-            entry.setFood(food.getText().toString());
+            entry.setFoodID(mDbHelper.getFoodId(food.getSelectedItem().toString()));
             entry.setCarbCount(Integer.parseInt(text_carbs.getText().toString()));
             entry.setStartingBG(Integer.parseInt(text_bg.getText().toString()));
 
@@ -243,15 +223,6 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
             {
                 entry.setExtendedBolus(Double.parseDouble(text_extended_bolus.getText().toString()));
                 entry.setBolus_Time(Integer.parseInt(text_bolus_time.getText().toString()));
-            }
-
-            if (text_finalBG.getText().length() == 0)
-            {
-                entry.setFinalBG(0);
-            }
-            else
-            {
-                entry.setFinalBG(Integer.parseInt(text_finalBG.getText().toString()));
             }
         }
         catch (Exception e)

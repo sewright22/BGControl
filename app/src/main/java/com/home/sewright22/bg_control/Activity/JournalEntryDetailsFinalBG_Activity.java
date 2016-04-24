@@ -137,7 +137,7 @@ public class JournalEntryDetailsFinalBG_Activity extends AppCompatActivity imple
             case R.id.action_save:
                 saveData();
                 Intent parcelIntent = new Intent(JournalEntryDetailsFinalBG_Activity.this, MainActivity.class);
-                parcelIntent.putExtra("item", entry);
+                parcelIntent.putExtra("item", entry.get_id());
                 setResult(Activity.RESULT_OK, parcelIntent);
                 finish();
                 return true;

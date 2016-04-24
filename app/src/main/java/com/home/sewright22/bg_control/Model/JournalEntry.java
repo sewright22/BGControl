@@ -13,7 +13,7 @@ import java.util.TimeZone;
 /**
  * Created by steve on 1/22/2016.
  */
-public class JournalEntry implements Parcelable
+public class JournalEntry
 {
     private int _id;
     private int StartingBG;
@@ -26,24 +26,12 @@ public class JournalEntry implements Parcelable
     private int Bolus_Type;
     private int Bolus_Time;
     private int _time_elapsed_in_minutes;
+    private int foodID;
 
     public JournalEntry()
     {
         Time = Calendar.getInstance().getTime();
         Food = "";
-    }
-
-    public JournalEntry(Parcel in)
-    {
-        this.Food = (in.readString());
-        this.Time = (Date) in.readValue(Date.class.getClassLoader());
-        this.CarbCount = in.readInt();
-        this.Bolus_Type = in.readInt();
-        this.InitialBolus = in.readDouble();
-        this.ExtendedBolus = in.readDouble();
-        this.Bolus_Time = in.readInt();
-        this.StartingBG = in.readInt();
-        this.FinalBG = in.readInt();
     }
 
     public void setStartingBG(int startingBG)
@@ -183,40 +171,6 @@ public class JournalEntry implements Parcelable
         return retVal.toString();
     }
 
-    @Override
-    public int describeContents()
-    {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
-        dest.writeString(Food);
-        dest.writeValue(Time);
-        dest.writeInt(CarbCount);
-        dest.writeInt(Bolus_Type);
-        dest.writeDouble(InitialBolus);
-        dest.writeDouble(ExtendedBolus);
-        dest.writeInt(Bolus_Time);
-        dest.writeInt(StartingBG);
-        dest.writeInt(FinalBG);
-    }
-
-    public static final Parcelable.Creator<JournalEntry> CREATOR = new Parcelable.Creator<JournalEntry>()
-    {
-
-        public JournalEntry createFromParcel(Parcel in)
-        {
-            return new JournalEntry(in);
-        }
-
-        public JournalEntry[] newArray(int size)
-        {
-            return new JournalEntry[size];
-        }
-    };
-
     public void update(JournalEntry in)
     {
         this.Food = (in.getFood());
@@ -227,5 +181,15 @@ public class JournalEntry implements Parcelable
         this.Bolus_Time = in.getBolus_Time();
         this.StartingBG = in.getStartingBG();
         this.FinalBG = in.getFinalBG();
+    }
+
+    public int getFoodID()
+    {
+        return foodID;
+    }
+
+    public void setFoodID(int foodID)
+    {
+        this.foodID = foodID;
     }
 }

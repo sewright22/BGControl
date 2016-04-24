@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
 {
     private JournalEntryDbHelper mDbHelper;
     private JournalEntryList journalEntries = new JournalEntryList();
-    private MyBroadcastReceiver MyReceiver;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -61,15 +60,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
-        listView.setOnItemClickListener(new ListViewItemClickListener());
+        listView.setOnItemClickListener(new JournalEntryListClickListener());
 
-        IntentFilter intentFilter= new IntentFilter("com.eveningoutpost.dexdrip.permissions.RECEIVE_BG_ESTIMATE");
-        MyReceiver = new MyBroadcastReceiver();
 
-        if(intentFilter!=null)
-        {
-            registerReceiver(MyReceiver,intentFilter);
-        }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -132,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
                         .setContentText("Please enter your current BG.");
 
         Intent parcelIntent = new Intent(MainActivity.this, JournalEntryDetailsActivity.class);
-        parcelIntent.putExtra("item", entry);
+        parcelIntent.putExtra("item", entry.get_id());
 
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
@@ -162,39 +155,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
     private void insertTestRecord()
     {
         JournalEntry first = new JournalEntry();
-        first.setFood("Cake");
+        first.setFoodID(1);
         first.setCarbCount(24);
         first.setStartingBG(123);
         first.setInitialBolus(2);
         first.setBolus_Type(R.integer.bolus_instant);
         JournalEntryDbHelper mDbHelper = new JournalEntryDbHelper(this);
+        mDbHelper.insertFood("Bacon");
         mDbHelper.insertJournalEntry(first);
     }
 
 
     private void UpdateDisplayedJournal()
     {
+        //insertTestRecord();
         ListView listView = (ListView) findViewById(R.id.list);
-        journalEntries.clear();
-        Cursor cursor = mDbHelper.getAllEntries();
-        cursor.moveToFirst();
 
-        while (cursor.isAfterLast() == false)
-        {
-            JournalEntry entry = new JournalEntry();
-            entry.set_id(cursor.getInt(0));
-            String date = cursor.getString(1);
-            entry.setTime(date);
-            entry.setFood(cursor.getString(2));
-            entry.setCarbCount(cursor.getInt(3));
-            entry.setStartingBG(cursor.getInt(4));
-            entry.setBolus_Type(cursor.getInt(5));
-            entry.setInitialBolus(cursor.getDouble(6));
-            entry.setExtendedBolus(cursor.getDouble(7));
-            entry.setBolus_Time(cursor.getInt(8));
-            journalEntries.insertJournalEntry(entry);
-            cursor.moveToNext();
-        }
+        journalEntries = mDbHelper.getActiveEntries();
+
         // Define a new Adapter
         // First parameter - Context
         // Second parameter - Layout for the row
@@ -262,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
 
                 JournalEntry itemValue = new JournalEntry();
 
-                parcelIntent.putExtra("item", itemValue);
+                parcelIntent.putExtra("item", itemValue.get_id());
 
                 startActivityForResult(parcelIntent, journalEntries.getCount() + 1);
                 break;
@@ -271,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
         }
     }
 
-    private class ListViewItemClickListener implements OnItemClickListener
+    private class JournalEntryListClickListener implements OnItemClickListener
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view,
@@ -286,31 +264,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
             // ListView Clicked item value
             JournalEntry itemValue = (JournalEntry) listView.getItemAtPosition(itemPosition);
 
-            parcelIntent.putExtra("item", itemValue);
+            int tempID = itemValue.get_id();
+            parcelIntent.putExtra("id", tempID);
 
             startActivityForResult(parcelIntent, itemPosition);
         }
-    }
-
-    public class MyBroadcastReceiver extends BroadcastReceiver
-    {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-
-
-            Toast.makeText(MainActivity.this, "Data Received from External App", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        // TODO Auto-generated method stub
-        super.onDestroy();
-        if(MyReceiver!= null)
-            unregisterReceiver(MyReceiver);;
     }
 }
 
