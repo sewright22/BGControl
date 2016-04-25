@@ -3,11 +3,12 @@ package com.home.sewright22.bg_control.Model;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by steve on 1/22/2016.
  */
-public class JournalEntryList
+public class JournalEntryList implements Iterable<JournalEntry>
 {
     private ArrayList<JournalEntry> journalEntries = new ArrayList<JournalEntry>();
     private ArrayList<String> values = new ArrayList<String>();
@@ -45,5 +46,11 @@ public class JournalEntryList
     public int getCount()
     {
         return journalEntries.size();
+    }
+
+    @Override
+    public Iterator<JournalEntry> iterator()
+    {
+        return journalEntries.iterator();
     }
 }

@@ -153,13 +153,13 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         return retVal;
     }
 
-    public long insertBG_Reading(int journalEntryID, double reading)
+    public long insertBG_Reading(int journalEntryID, double reading, long dateTime)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BG_EstimateTable.COLUMN_NAME_JOURNAL_ENTRY_ID, journalEntryID);
         contentValues.put(BG_EstimateTable.COLUMN_NAME_GLUCOSE_READING, reading);
-        contentValues.put(BG_EstimateTable.COLUMN_NAME_READING_TIME, getCurrentTime());
+        contentValues.put(BG_EstimateTable.COLUMN_NAME_READING_TIME, dateTime);
         long retVal = db.insert(BG_EstimateTable.TABLE_NAME, null, contentValues);
         return retVal;
     }

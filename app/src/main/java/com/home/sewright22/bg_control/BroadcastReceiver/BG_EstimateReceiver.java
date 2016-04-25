@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.home.sewright22.bg_control.Activity.MainActivity;
 import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
+import com.home.sewright22.bg_control.Model.JournalEntry;
+import com.home.sewright22.bg_control.Model.JournalEntryList;
 
 import java.util.Date;
 
@@ -21,10 +23,14 @@ public class BG_EstimateReceiver extends BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
         mDbHelper = new JournalEntryDbHelper(context);
 
-        // TODO Auto-generated method stub
         final double bgEstimate = intent.getDoubleExtra("com.eveningoutpost.dexdrip.Extras.BgEstimate", 0);
         long datetime = intent.getLongExtra("com.eveningoutpost.dexdrip.Extras.Time", new Date().getTime());
-        //Toast.makeText(MainActivity.this, "Data Received from External App", Toast.LENGTH_SHORT).show();
 
+        JournalEntryList activeEntries = mDbHelper.getActiveEntries();
+
+        for (JournalEntry entry: activeEntries)
+        {
+            mDbHelper.insertBG_Reading(entry.get_id(), bgEstimate, datetime);
+        }
     }
 }
