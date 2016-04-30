@@ -20,7 +20,7 @@ public class JournalEntryList implements Iterable<JournalEntry>
 
     public void insertJournalEntry(JournalEntry journalEntry, int pos)
     {
-        journalEntries.get(pos).update(journalEntry);
+        //journalEntries.get(pos).update(journalEntry);
     }
 
     public void clear()

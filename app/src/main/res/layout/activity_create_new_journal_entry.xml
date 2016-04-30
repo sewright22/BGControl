@@ -14,7 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_below="@id/text_new_start_time"
         android:layout_alignParentStart="true"/>
+
+    <LinearLayout
+        android:id="@+id/food_adder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
     <Spinner
         android:id="@+id/text_new_food"
@@ -22,15 +29,16 @@
         android:spinnerMode="dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_new_start_time"
+        android:layout_weight="1"
         android:prompt="@string/hint_activity_journal_entry_details_food"/>
 
     <Button
         android:id="@+id/btn_new_add_food"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/text_new_food"
         android:text="+"/>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/text_new_carbs"
@@ -38,21 +46,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/text_new_food"
+        android:layout_below="@id/food_adder"
         android:hint="@string/hint_activity_journal_entry_details_carb_count"/>
-
-    <EditText
-        android:id="@+id/text_new_starting_bg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_new_carbs"
-        android:hint="@string/hint_activity_journal_entry_details_starting_bg"/>
 
     <TextView
         android:id="@+id/label_bolus_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_new_starting_bg"
+        android:layout_below="@id/text_new_carbs"
         android:text="Bolus Type:"/>
 
     <RadioGroup
@@ -71,16 +72,10 @@
             android:text="Instant"/>
 
         <RadioButton
-            android:id="@+id/rad_square"
+            android:id="@+id/rad_extended"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Square Wave"/>
-
-        <RadioButton
-            android:id="@+id/rad_dual_wave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dual Wave"/>
+            android:text="Extended"/>
 
     </RadioGroup>
 
@@ -97,25 +92,36 @@
         android:hint="@string/hint_activity_journal_entry_details_inital_bolus"/>
 
     <EditText
-        android:id="@+id/text_new_extended_bolus"
+        android:id="@+id/text_percent_up_front"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
+        android:inputType="number"
         android:layout_below="@id/text_new_inital_bolus"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:digits="0123456789."
         android:visibility="gone"
-        android:hint="@string/hint_activity_journal_entry_details_extended_bolus"/>
+        android:hint="@string/hint_activity_journal_entry_details_percent_up_front"/>
+
+    <EditText
+        android:id="@+id/text_new_percent_over_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:layout_below="@id/text_percent_up_front"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:hint="@string/hint_activity_journal_entry_details_percent_over_time"/>
 
     <EditText
         android:id="@+id/text_new_bolus_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:layout_below="@id/text_new_extended_bolus"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/text_new_percent_over_time"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:digits="0123456789."
         android:visibility="gone"
         android:hint="@string/hint_activity_journal_entry_details_bolus_time"/>
 

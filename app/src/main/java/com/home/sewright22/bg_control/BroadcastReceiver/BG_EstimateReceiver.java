@@ -30,7 +30,7 @@ public class BG_EstimateReceiver extends BroadcastReceiver
 
         for (JournalEntry entry: activeEntries)
         {
-            mDbHelper.insertBG_Reading(entry.get_id(), bgEstimate, datetime);
+            //mDbHelper.insertBG_Reading(entry.get_id(), bgEstimate, datetime);
         }
     }
 }

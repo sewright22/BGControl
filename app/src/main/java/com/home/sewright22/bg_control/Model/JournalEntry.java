@@ -1,8 +1,6 @@
 package com.home.sewright22.bg_control.Model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,84 +14,48 @@ import java.util.TimeZone;
 public class JournalEntry
 {
     private int _id;
-    private int StartingBG;
-    private int FinalBG;
-    private double InitialBolus;
-    private double ExtendedBolus;
-    private Date Time;
-    private String Food;
-    private int CarbCount;
-    private int Bolus_Type;
-    private int Bolus_Time;
+    private double _bolusAmount;
+    private Date _timeStamp;
+    private int _carbCount;
     private int _time_elapsed_in_minutes;
-    private int foodID;
+    private int _foodID;
+    private int _numberOfMinutesUntilMeal;
+
+    public int get_bolusID()
+    {
+        return _bolusID;
+    }
+
+    public void set_bolusID(int _bolusID)
+    {
+        this._bolusID = _bolusID;
+    }
+
+    private int _bolusID;
 
     public JournalEntry()
     {
-        Time = Calendar.getInstance().getTime();
-        Food = "";
+        _timeStamp = Calendar.getInstance().getTime();
     }
 
-    public void setStartingBG(int startingBG)
+    public void set_bolusAmount(double bolusAmount)
     {
-        StartingBG = startingBG;
+        _bolusAmount = bolusAmount;
     }
 
-    public void setFinalBG(int finalBG)
+    public void set_carbCount(int cc)
     {
-        FinalBG = finalBG;
-
-        if(finalBG > 0)
-        {
-            long timeInMillis = Calendar.getInstance().getTimeInMillis() - Time.getTime();
-            long timeInSeconds = timeInMillis/1000;
-            _time_elapsed_in_minutes = (int)(timeInSeconds/60);
-        }
+        _carbCount = cc;
     }
 
-    public void setInitialBolus(double initialBolus)
-    {
-        InitialBolus = initialBolus;
-    }
-
-    public void setFood(String food)
-    {
-        Food = food;
-    }
-
-    public void setCarbCount(int cc)
-    {
-        CarbCount = cc;
-    }
-
-    public double getExtendedBolus()
-    {
-        return ExtendedBolus;
-    }
-
-    public void setExtendedBolus(double extendedBolus)
-    {
-        ExtendedBolus = extendedBolus;
-    }
-
-    public void setBolus_Type(int bolus_Type)
-    {
-        Bolus_Type = bolus_Type;
-    }
-
-    public void setBolus_Time(int bolus_Time)
-    {
-        Bolus_Time = bolus_Time;
-    }
-
-    public void setTime(String date)
+    public void set_timeStamp(String date)
     {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy", Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Time = new Date();
+        _timeStamp = new Date();
         try
         {
-            Time = dateFormat.parse(date);
+            _timeStamp = dateFormat.parse(date);
         }
         catch(ParseException pe)
         {
@@ -111,44 +73,19 @@ public class JournalEntry
         return _id;
     }
 
-    public int getBolus_Type()
-    {
-        return Bolus_Type;
-    }
-
-    public int getBolus_Time()
-    {
-        return Bolus_Time;
-    }
-
-    public String getFood()
-    {
-        return Food;
-    }
-
     public int getCarbs()
     {
-        return CarbCount;
-    }
-
-    public int getStartingBG()
-    {
-        return StartingBG;
+        return _carbCount;
     }
 
     public double getInitialBolus()
     {
-        return InitialBolus;
-    }
-
-    public int getFinalBG()
-    {
-        return FinalBG;
+        return _bolusAmount;
     }
 
     public Date getStartTime()
     {
-        return Time;
+        return _timeStamp;
     }
 
     public int get_time_elapsed_in_minutes()
@@ -160,36 +97,24 @@ public class JournalEntry
     public String toString()
     {
         StringBuilder retVal = new StringBuilder();
-        //retVal.append(DateFormat.getTimeInstance().format(Time));
-        retVal.append(Food);
+        retVal.append(DateFormat.getTimeInstance().format(_timeStamp));
+        /*retVal.append(Food);
         retVal.append(System.getProperty("line.separator"));
         retVal.append("BOL: ");
         retVal.append(InitialBolus);
         retVal.append(" SBG: ");
-        retVal.append(StartingBG);
+        retVal.append(StartingBG);*/
 
         return retVal.toString();
     }
 
-    public void update(JournalEntry in)
+    public int get_foodID()
     {
-        this.Food = (in.getFood());
-        this.CarbCount = in.getCarbs();
-        this.Bolus_Type = in.getBolus_Type();
-        this.InitialBolus = in.getInitialBolus();
-        this.ExtendedBolus = in.getExtendedBolus();
-        this.Bolus_Time = in.getBolus_Time();
-        this.StartingBG = in.getStartingBG();
-        this.FinalBG = in.getFinalBG();
+        return _foodID;
     }
 
-    public int getFoodID()
+    public void set_foodID(int _foodID)
     {
-        return foodID;
-    }
-
-    public void setFoodID(int foodID)
-    {
-        this.foodID = foodID;
+        this._foodID = _foodID;
     }
 }

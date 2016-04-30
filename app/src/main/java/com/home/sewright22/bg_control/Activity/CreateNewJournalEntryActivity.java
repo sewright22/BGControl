@@ -11,17 +11,16 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
 import com.home.sewright22.bg_control.FoodRetrieval.CarbDbXmlParser;
-import com.home.sewright22.bg_control.FoodRetrieval.UrlBuilder;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.R;
 
@@ -53,15 +52,16 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
         TextView time = (TextView) findViewById(R.id.text_new_start_time);
         Spinner food = (Spinner) findViewById(R.id.text_new_food);
         EditText text_carbs = (EditText) findViewById(R.id.text_new_carbs);
-        EditText text_bg = (EditText) findViewById(R.id.text_new_starting_bg);
+        //EditText text_bg = (EditText) findViewById(R.id.text_new_starting_bg);
         Button btn_addFood = (Button) findViewById(R.id.btn_new_add_food);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                                                                 android.R.layout.simple_spinner_item, mDbHelper.getAllFoods());
         food.setAdapter(adapter);
+        food.setOnItemSelectedListener(new OnFoodItemSelectedListener());
         //food.setInputType(InputType.TYPE_CLASS_TEXT);
         text_carbs.setInputType(InputType.TYPE_CLASS_NUMBER);
-        text_bg.setInputType(InputType.TYPE_CLASS_NUMBER);
+        //text_bg.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         time.setText(DateFormat.getTimeInstance().format(entry.getStartTime()));
 
@@ -89,6 +89,11 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
                     public void onClick(DialogInterface dialog, int which) {
                         JournalEntryDbHelper mDbHelper = new JournalEntryDbHelper(CreateNewJournalEntryActivity.this);
                         mDbHelper.insertFood(input.getText().toString());
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateNewJournalEntryActivity.this,
+                                                                                android.R.layout.simple_spinner_item, mDbHelper.getAllFoods());
+
+                        Spinner food = (Spinner) findViewById(R.id.text_new_food);
+                        food.setAdapter(adapter);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -120,8 +125,9 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
         {
             case R.id.action_save:
                 saveData();
-                mDbHelper.insertJournalEntry(entry);
+                long newID = mDbHelper.insertJournalEntry(entry);
                 Intent parcelIntent = new Intent(CreateNewJournalEntryActivity.this, MainActivity.class);
+                parcelIntent.putExtra("entryID", (int)newID);
                 setResult(Activity.RESULT_OK, parcelIntent);
                 finish();
                 return true;
@@ -139,62 +145,31 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
     {
         int id = checkedId;
         EditText initial = (EditText) findViewById(R.id.text_new_inital_bolus);
-        EditText extend = (EditText) findViewById(R.id.text_new_extended_bolus);
         EditText bolus_time = (EditText) findViewById(R.id.text_new_bolus_time);
+        EditText percentUpFront = (EditText) findViewById(R.id.text_percent_up_front);
+        EditText percentOverTime = (EditText) findViewById(R.id.text_new_percent_over_time);
         switch (id)
         {
             case -1:
                 break;
             case R.id.rad_instant:
                 initial.setVisibility(View.VISIBLE);
-                extend.setVisibility(View.GONE);
                 bolus_time.setVisibility(View.GONE);
-                entry.setBolus_Type(R.integer.bolus_instant);
+                percentUpFront.setVisibility(View.GONE);
+                percentOverTime.setVisibility(View.GONE);
+                //entry.setBolus_Type(R.integer.bolus_instant);
                 break;
-            case R.id.rad_square:
+            case R.id.rad_extended:
                 initial.setVisibility(View.GONE);
-                extend.setVisibility(View.VISIBLE);
                 bolus_time.setVisibility(View.VISIBLE);
-                entry.setBolus_Type(R.integer.bolus_extended);
-                break;
-            case R.id.rad_dual_wave:
-                initial.setVisibility(View.VISIBLE);
-                extend.setVisibility(View.VISIBLE);
-                bolus_time.setVisibility(View.VISIBLE);
-                entry.setBolus_Type(R.integer.bolus_dual_wave);
+                percentUpFront.setVisibility(View.VISIBLE);
+                percentOverTime.setVisibility(View.VISIBLE);
+                //entry.setBolus_Type(R.integer.bolus_extended);
                 break;
             default:
                 break;
         }
     }
-
-    /*protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (resultCode == RESULT_OK)
-        {
-            if (requestCode == 1)
-            {
-                EditText text_food = (EditText) findViewById(R.id.text_food);
-                String ndbno = data.getExtras().getString("ndbno");
-                String food = data.getExtras().getString("food");
-
-                text_food.setText(food);
-
-                String urlString = UrlBuilder.buildCarbSearchUrl(ndbno);
-                new WebsiteRetriever().execute(urlString);
-            }
-        }
-    }
-
-    public void searchFoodClicked(View view)
-    {
-        EditText food = (EditText) findViewById(R.id.text_food);
-
-
-        Intent intent = new Intent(CreateNewJournalEntryActivity.this, FoodListResultActivity.class);
-        intent.putExtra("SearchString", food.getText().toString());
-        startActivityForResult(intent, 1);
-    }*/
 
     private void saveData()
     {
@@ -203,27 +178,11 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
             TextView time = (TextView) findViewById(R.id.text_new_start_time);
             Spinner food = (Spinner) findViewById(R.id.text_new_food);
             EditText text_carbs = (EditText) findViewById(R.id.text_new_carbs);
-            EditText text_bg = (EditText) findViewById(R.id.text_new_starting_bg);
             EditText text_inital_bolus = (EditText) findViewById(R.id.text_new_inital_bolus);
-            EditText text_extended_bolus = (EditText) findViewById(R.id.text_new_extended_bolus);
             EditText text_bolus_time = (EditText) findViewById(R.id.text_new_bolus_time);
 
-            entry.setFoodID(mDbHelper.getFoodId(food.getSelectedItem().toString()));
-            entry.setCarbCount(Integer.parseInt(text_carbs.getText().toString()));
-            entry.setStartingBG(Integer.parseInt(text_bg.getText().toString()));
-
-            if (entry.getBolus_Type() == R.integer.bolus_instant ||
-                    entry.getBolus_Type() == R.integer.bolus_dual_wave)
-            {
-                entry.setInitialBolus(Double.parseDouble(text_inital_bolus.getText().toString()));
-            }
-
-            if (entry.getBolus_Type() == R.integer.bolus_extended ||
-                    entry.getBolus_Type() == R.integer.bolus_dual_wave)
-            {
-                entry.setExtendedBolus(Double.parseDouble(text_extended_bolus.getText().toString()));
-                entry.setBolus_Time(Integer.parseInt(text_bolus_time.getText().toString()));
-            }
+            entry.set_foodID(mDbHelper.getFoodId(food.getSelectedItem().toString()));
+            entry.set_carbCount(Integer.parseInt(text_carbs.getText().toString()));
         }
         catch (Exception e)
         {
@@ -284,6 +243,22 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
             catch (IOException e)
             {
             }
+        }
+    }
+
+    private class OnFoodItemSelectedListener implements AdapterView.OnItemSelectedListener
+    {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+        {
+            String food = (String)parent.getItemAtPosition(position);
+            String test = food.toString();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent)
+        {
+
         }
     }
 }
