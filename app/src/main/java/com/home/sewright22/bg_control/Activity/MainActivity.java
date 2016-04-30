@@ -179,9 +179,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
 
     private void UpdateDisplayedJournal()
     {
-        mDbHelper.dropTables();
-        mDbHelper.createTables();
-        insertTestRecord();
+        //mDbHelper.dropTables();
+        //mDbHelper.createTables();
+        //insertTestRecord();
 
         ListView listView = (ListView) findViewById(R.id.list);
 

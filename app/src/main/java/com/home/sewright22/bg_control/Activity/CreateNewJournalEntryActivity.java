@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
 import com.home.sewright22.bg_control.FoodRetrieval.CarbDbXmlParser;
+import com.home.sewright22.bg_control.Model.Bolus;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.R;
 
@@ -40,6 +41,7 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
 {
     private JournalEntryDbHelper mDbHelper;
     private JournalEntry entry;
+    private Bolus _bolus;
     private String m_text = "";
 
     @Override
@@ -52,7 +54,6 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
         TextView time = (TextView) findViewById(R.id.text_new_start_time);
         Spinner food = (Spinner) findViewById(R.id.text_new_food);
         EditText text_carbs = (EditText) findViewById(R.id.text_new_carbs);
-        //EditText text_bg = (EditText) findViewById(R.id.text_new_starting_bg);
         Button btn_addFood = (Button) findViewById(R.id.btn_new_add_food);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -126,6 +127,7 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
             case R.id.action_save:
                 saveData();
                 long newID = mDbHelper.insertJournalEntry(entry);
+
                 Intent parcelIntent = new Intent(CreateNewJournalEntryActivity.this, MainActivity.class);
                 parcelIntent.putExtra("entryID", (int)newID);
                 setResult(Activity.RESULT_OK, parcelIntent);
@@ -178,71 +180,29 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
             TextView time = (TextView) findViewById(R.id.text_new_start_time);
             Spinner food = (Spinner) findViewById(R.id.text_new_food);
             EditText text_carbs = (EditText) findViewById(R.id.text_new_carbs);
-            EditText text_inital_bolus = (EditText) findViewById(R.id.text_new_inital_bolus);
-            EditText text_bolus_time = (EditText) findViewById(R.id.text_new_bolus_time);
+            EditText text_bolus_amount = (EditText) findViewById(R.id.text_new_inital_bolus);
+            EditText text_percent_up_front = (EditText) findViewById(R.id.text_percent_up_front);
+            EditText text_percent_over_time = (EditText) findViewById(R.id.text_new_percent_over_time);
+            EditText text_length_of_time = (EditText) findViewById(R.id.text_new_bolus_time);
+
+            _bolus = new Bolus();
+            String test = text_percent_up_front.getText().toString();
+            _bolus.set_amount(text_bolus_amount.getText().toString().equals("") ? 0 : Double.parseDouble(text_bolus_amount.getText().toString()));
+            _bolus.set_percent_up_front(text_percent_up_front.getText().toString().equals("") ? 0 : Integer.parseInt(text_percent_up_front.getText().toString()));
+            _bolus.set_percent_over_time(text_percent_over_time.getText().toString().equals("") ? 0 : Integer.parseInt(text_percent_over_time.getText().toString()));
+            _bolus.set_length_of_time(text_length_of_time.getText().toString().equals("") ? 0 : Integer.parseInt(text_length_of_time.getText().toString()));
+
+            long bolusID = mDbHelper.insertBolus(_bolus.get_amount(), _bolus.get_percent_up_front(), _bolus.get_percent_over_time(), _bolus.get_length_of_time());
 
             entry.set_foodID(mDbHelper.getFoodId(food.getSelectedItem().toString()));
+            entry.set_bolusID((int)bolusID);
             entry.set_carbCount(Integer.parseInt(text_carbs.getText().toString()));
         }
         catch (Exception e)
         {
             setResult(Activity.RESULT_CANCELED);
             finish();
-        }
-    }
-
-    public class WebsiteRetriever extends AsyncTask<String, Void, String>
-    {
-        private Exception exception;
-
-        protected String doInBackground(String... urlString)
-        {
-            StringBuffer chaine = new StringBuffer("");
-            try
-            {
-                URL url = new URL(urlString[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestProperty("User-Agent", "");
-                connection.setRequestMethod("POST");
-                connection.setDoInput(true);
-                connection.connect();
-
-                InputStream inputStream = connection.getInputStream();
-
-                BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
-                String line = "";
-                while ((line = rd.readLine()) != null)
-                {
-                    chaine.append(line);
-                }
-
-            }
-            catch (IOException e)
-            {
-                // writing exception to log
-                e.printStackTrace();
-            }
-
-            return chaine.toString();
-        }
-
-        protected void onPostExecute(String feed)
-        {
-            String retVal;
-            EditText text_carbs = (EditText) findViewById(R.id.text_carbs);
-            InputStream stream = new ByteArrayInputStream(feed.getBytes(StandardCharsets.UTF_8));
-            CarbDbXmlParser parser = new CarbDbXmlParser();
-            try
-            {
-                retVal = parser.parse(stream);
-                text_carbs.setText(retVal.toString());
-            }
-            catch (XmlPullParserException e)
-            {
-            }
-            catch (IOException e)
-            {
-            }
+            //return -1;
         }
     }
 

@@ -91,6 +91,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(point_graph);
 
+
         int labelNum = (int)(point_series.getHighestValueX()/9);
 
         String[] xAxisLabelArray = new String[9];
@@ -104,17 +105,18 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         xAxisLabelArray[7] = "" + labelNum * 7;
         xAxisLabelArray[8] = "" + labelNum * 8;
 
-        text_starting_bg.setText("Starting BG: " + (int)points.get(0).getY());
+        if(points.size() > 0)
+        {
+            text_starting_bg.setText("Starting BG: " + (int) points.get(0).getY());
+        }
+        else
+        {
+            text_starting_bg.setText("Starting BG: Haven't received and readings yet.");
+        }
 
 
         //staticLabelsFormatter.setHorizontalLabels(xAxisLabelArray);
-        //point_graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-        point_series.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                //Toast.makeText(JournalEntryDetailsActivity.this, "Series1: On Data Point clicked: " + dataPoint, Toast.LENGTH_SHORT).show();
-            }
-        });
+        point_graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
     }
 
     @Override
