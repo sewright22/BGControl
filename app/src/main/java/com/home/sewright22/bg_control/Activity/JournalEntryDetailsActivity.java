@@ -1,45 +1,22 @@
 package com.home.sewright22.bg_control.Activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.home.sewright22.bg_control.Contract.JournalEntryDbHelper;
-import com.home.sewright22.bg_control.FoodRetrieval.CarbDbXmlParser;
-import com.home.sewright22.bg_control.FoodRetrieval.UrlBuilder;
+import com.home.sewright22.bg_control.Model.BG_Reading;
 import com.home.sewright22.bg_control.Model.Bolus;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.PointsGraphSeries;
-import com.jjoe64.graphview.series.Series;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.util.ArrayList;
 
@@ -48,6 +25,10 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
     private JournalEntryDbHelper mDbHelper;
     private JournalEntry entry;
     private Bolus _bolus;
+    private ArrayList<DataPoint> bgReadings;
+    private ArrayList<DataPoint> activeInsulinReadings;
+    private PointsGraphSeries<DataPoint> pointSeriesBG;
+    private PointsGraphSeries<DataPoint> pointSeriesActiveInsulin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,6 +46,7 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         TextView text_percent_up_front = (TextView) findViewById(R.id.text_detail_percent_up_front);
         TextView text_percent_over_time = (TextView) findViewById(R.id.text_detail_percent_over_time);
         TextView text_length_of_time = (TextView) findViewById(R.id.text_detail_length_of_time);
+        TextView text_peaked_duration = (TextView) findViewById(R.id.text_detail_peaked_duration);
 
         entry = mDbHelper.getSpecificEntry(entryID);
         _bolus = mDbHelper.getBolus(entry.get_bolusID());
@@ -76,46 +58,72 @@ public class JournalEntryDetailsActivity extends AppCompatActivity
         text_percent_over_time.setText("Percent Over Time: " + _bolus.get_percent_over_time() + "%");
         text_length_of_time.setText("Length of Time: " + _bolus.get_length_of_time() + " hour(s)");
 
-        GraphView point_graph = (GraphView) findViewById(R.id.graph);
+        createBG_Graph();
+        createActiveInsulinGraph();
 
-        ArrayList<DataPoint> points = mDbHelper.getBG_Readings(entryID);
-
-        DataPoint[] pointArray = new DataPoint[points.size()];
-
-        PointsGraphSeries<DataPoint> point_series = new PointsGraphSeries<DataPoint>(points.toArray(pointArray));
-
-        point_graph.addSeries(point_series);
-        point_series.setShape(PointsGraphSeries.Shape.POINT);
-        point_series.setColor(Color.RED);
-        point_series.setSize(10);
-
-        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(point_graph);
-
-
-        int labelNum = (int)(point_series.getHighestValueX()/9);
-
-        String[] xAxisLabelArray = new String[9];
-        xAxisLabelArray[0] = "0";
-        xAxisLabelArray[1] = "" + labelNum * 1;
-        xAxisLabelArray[2] = "" + labelNum * 2;
-        xAxisLabelArray[3] = "" + labelNum * 3;
-        xAxisLabelArray[4] = "" + labelNum * 4;
-        xAxisLabelArray[5] = "" + labelNum * 5;
-        xAxisLabelArray[6] = "" + labelNum * 6;
-        xAxisLabelArray[7] = "" + labelNum * 7;
-        xAxisLabelArray[8] = "" + labelNum * 8;
-
-        if(points.size() > 0)
+        if(bgReadings.size() > 0)
         {
-            text_starting_bg.setText("Starting BG: " + (int) points.get(0).getY());
+            text_starting_bg.setText("Starting BG: " + (int) bgReadings.get(0).getY());
         }
         else
         {
             text_starting_bg.setText("Starting BG: Haven't received and readings yet.");
         }
 
+        if(mDbHelper.getLatestReadingForEntry(entryID).getSlopeName().equals(""))
+        {
+            BG_Reading peakBG = mDbHelper.getPeakReadingForEntry(entryID);
+            text_peaked_duration.setText("You peaked at " + peakBG.getValue()  + " after " + peakBG.getMinutesSinceStart() + " minutes.");
+        }
+        else
+        {
+            text_peaked_duration.setText("You don't seem to have peaked from this meal yet.");
+        }
 
-        //staticLabelsFormatter.setHorizontalLabels(xAxisLabelArray);
+    }
+
+    @NonNull
+    private void createBG_Graph()
+    {
+        GraphView point_graph = (GraphView) findViewById(R.id.graph);
+
+        bgReadings = mDbHelper.getBG_Readings(entry.get_id());
+
+        DataPoint[] pointArray = new DataPoint[bgReadings.size()];
+
+        pointSeriesBG = new PointsGraphSeries<DataPoint>(bgReadings.toArray(pointArray));
+        point_graph.addSeries(pointSeriesBG);
+        pointSeriesBG.setShape(PointsGraphSeries.Shape.POINT);
+        pointSeriesBG.setColor(Color.RED);
+        pointSeriesBG.setSize(10);
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(point_graph);
+        point_graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+    }
+
+    private void createActiveInsulinGraph()
+    {
+        GraphView point_graph = (GraphView) findViewById(R.id.graph_active_insulin);
+
+        activeInsulinReadings = new ArrayList<DataPoint>();
+        DataPoint[] pointArray = new DataPoint[bgReadings.size()];
+
+        double bolusAmount = _bolus.get_amount();
+        double percentagePerMinute = 0.00416666666666;
+
+        for (DataPoint point :
+                bgReadings)
+        {
+
+            double activeInsulin = (bolusAmount - (bolusAmount*percentagePerMinute*point.getX()));
+            activeInsulinReadings.add(new DataPoint(point.getX(), activeInsulin));
+        }
+
+        pointSeriesActiveInsulin = new PointsGraphSeries<DataPoint>(activeInsulinReadings.toArray(pointArray));
+        point_graph.addSeries(pointSeriesActiveInsulin);
+        pointSeriesActiveInsulin.setShape(PointsGraphSeries.Shape.POINT);
+        pointSeriesActiveInsulin.setColor(Color.RED);
+        pointSeriesActiveInsulin.setSize(10);
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(point_graph);
         point_graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
     }
 

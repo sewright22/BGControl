@@ -188,7 +188,7 @@ public class CreateNewJournalEntryActivity extends AppCompatActivity implements 
             _bolus = new Bolus();
             String test = text_percent_up_front.getText().toString();
             _bolus.set_amount(text_bolus_amount.getText().toString().equals("") ? 0 : Double.parseDouble(text_bolus_amount.getText().toString()));
-            _bolus.set_percent_up_front(text_percent_up_front.getText().toString().equals("") ? 0 : Integer.parseInt(text_percent_up_front.getText().toString()));
+            _bolus.set_percent_up_front(text_percent_up_front.getText().toString().equals("") ? 100 : Integer.parseInt(text_percent_up_front.getText().toString()));
             _bolus.set_percent_over_time(text_percent_over_time.getText().toString().equals("") ? 0 : Integer.parseInt(text_percent_over_time.getText().toString()));
             _bolus.set_length_of_time(text_length_of_time.getText().toString().equals("") ? 0 : Integer.parseInt(text_length_of_time.getText().toString()));
 

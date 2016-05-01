@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import com.home.sewright22.bg_control.Model.BG_Reading;
 import com.home.sewright22.bg_control.Model.Bolus;
 import com.home.sewright22.bg_control.Model.JournalEntry;
 import com.home.sewright22.bg_control.Model.JournalEntryList;
@@ -50,6 +51,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         public static final String COLUMN_NAME_JOURNAL_ENTRY_ID = "journal_entry_id";
         public static final String COLUMN_NAME_GLUCOSE_READING = "bg_estimate";
         public static final String COLUMN_NAME_READING_TIME = "reading_time";
+        public static final String COLUMN_NAME_SLOPE_NAME = "slope_name";
     }
 
     public static abstract class FoodTable implements BaseColumns
@@ -77,7 +79,8 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
             BG_EstimateTable._ID + " INTEGER PRIMARY KEY," +
             BG_EstimateTable.COLUMN_NAME_JOURNAL_ENTRY_ID + INTEGER_TYPE + COMMA_SEP +
             BG_EstimateTable.COLUMN_NAME_GLUCOSE_READING + INTEGER_TYPE + COMMA_SEP +
-            BG_EstimateTable.COLUMN_NAME_READING_TIME + INTEGER_TYPE + " )";
+            BG_EstimateTable.COLUMN_NAME_READING_TIME + INTEGER_TYPE + COMMA_SEP +
+            BG_EstimateTable.COLUMN_NAME_SLOPE_NAME + TEXT_TYPE + " )";
 
     private static final String SQL_CREATE_FOODS = "CREATE TABLE " +
             FoodTable.TABLE_NAME + " (" +
@@ -111,7 +114,8 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
     private static final String SQL_BG_READING_COLUMNS = "" +
             BG_EstimateTable._ID + COMMA_SEP +
             BG_EstimateTable.COLUMN_NAME_READING_TIME + COMMA_SEP +
-            BG_EstimateTable.COLUMN_NAME_GLUCOSE_READING;
+            BG_EstimateTable.COLUMN_NAME_GLUCOSE_READING + COMMA_SEP +
+            BG_EstimateTable.COLUMN_NAME_SLOPE_NAME;
 
     private static final String SQL_SELECT_JOIN = "SELECT " + SQL_ENTRY_COLUMNS +
                                                   " FROM " + JournalEntryTable.TABLE_NAME;
@@ -119,7 +123,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
     private static final String SQL_WHERE_ENTRY_IS_ACTIVE = "WHERE " + JournalEntryTable.COLUMN_NAME_IS_ACTIVE + " = 1";
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "JournalEntry.db";
 
     public JournalEntryDbHelper(Context context)
@@ -182,13 +186,14 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         return retVal;
     }
 
-    public long insertBG_Reading(int journalEntryID, int reading, int dateTime)
+    public long insertBG_Reading(int journalEntryID, int reading, int dateTime, String slopeName)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BG_EstimateTable.COLUMN_NAME_JOURNAL_ENTRY_ID, journalEntryID);
         contentValues.put(BG_EstimateTable.COLUMN_NAME_GLUCOSE_READING, reading);
         contentValues.put(BG_EstimateTable.COLUMN_NAME_READING_TIME, dateTime);
+        contentValues.put(BG_EstimateTable.COLUMN_NAME_SLOPE_NAME, slopeName);
         long retVal = db.insert(BG_EstimateTable.TABLE_NAME, null, contentValues);
         return retVal;
     }
@@ -266,6 +271,54 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         }
 
         return entryList;
+    }
+
+    public BG_Reading getLatestReadingForEntry(int entryID)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + SQL_BG_READING_COLUMNS + " " +
+                "FROM " + BG_EstimateTable.TABLE_NAME + " " +
+                "WHERE " + BG_EstimateTable.COLUMN_NAME_JOURNAL_ENTRY_ID + " = " + entryID + " " +
+                "ORDER BY " + BG_EstimateTable.COLUMN_NAME_READING_TIME + " DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+
+        BG_Reading latestReading =  new BG_Reading();
+
+        if (cursor.isAfterLast() == false)
+        {
+            latestReading.setMinutesSinceStart(cursor.getInt(1));
+            latestReading.setValue(cursor.getLong(2));
+            latestReading.setSlopeName(cursor.getString(3));
+        }
+
+        return latestReading;
+    }
+
+    public BG_Reading getPeakReadingForEntry(int entryID)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + SQL_BG_READING_COLUMNS + " " +
+                "FROM " + BG_EstimateTable.TABLE_NAME + " " +
+                "WHERE " + BG_EstimateTable.COLUMN_NAME_JOURNAL_ENTRY_ID + " = " + entryID + " " +
+                "ORDER BY " + BG_EstimateTable.COLUMN_NAME_GLUCOSE_READING + " DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+
+        BG_Reading latestReading =  new BG_Reading();
+
+        if (cursor.isAfterLast() == false)
+        {
+            latestReading.setMinutesSinceStart(cursor.getInt(1));
+            latestReading.setValue(cursor.getLong(2));
+            latestReading.setSlopeName(cursor.getString(3));
+        }
+
+        return latestReading;
     }
 
     public ArrayList<DataPoint> getBG_Readings(int entryID)
@@ -418,9 +471,10 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper
         entry.set_bolusID(cursor.getInt(2));
         String date = cursor.getString(3);
         entry.set_timeStamp(date);
-
         entry.set_carbCount(cursor.getInt(4));
-            cursor.moveToNext();
+
+        entry.setFoodName(getFoodName(entry.get_foodID()));
+        cursor.moveToNext();
 
         return entry;
     }

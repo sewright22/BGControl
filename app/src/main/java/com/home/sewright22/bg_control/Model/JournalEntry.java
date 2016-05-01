@@ -14,12 +14,11 @@ import java.util.TimeZone;
 public class JournalEntry
 {
     private int _id;
-    private double _bolusAmount;
+    private Bolus _bolus;
     private Date _timeStamp;
     private int _carbCount;
-    private int _time_elapsed_in_minutes;
     private int _foodID;
-    private int _numberOfMinutesUntilMeal;
+    private String foodName;
 
     public int get_bolusID()
     {
@@ -36,11 +35,6 @@ public class JournalEntry
     public JournalEntry()
     {
         _timeStamp = Calendar.getInstance().getTime();
-    }
-
-    public void set_bolusAmount(double bolusAmount)
-    {
-        _bolusAmount = bolusAmount;
     }
 
     public void set_carbCount(int cc)
@@ -78,29 +72,19 @@ public class JournalEntry
         return _carbCount;
     }
 
-    public double getInitialBolus()
-    {
-        return _bolusAmount;
-    }
-
     public Date getStartTime()
     {
         return _timeStamp;
-    }
-
-    public int get_time_elapsed_in_minutes()
-    {
-        return _time_elapsed_in_minutes;
     }
 
     @Override
     public String toString()
     {
         StringBuilder retVal = new StringBuilder();
-        retVal.append(DateFormat.getTimeInstance().format(_timeStamp));
-        /*retVal.append(Food);
+        retVal.append(foodName);
         retVal.append(System.getProperty("line.separator"));
-        retVal.append("BOL: ");
+        retVal.append(DateFormat.getTimeInstance().format(_timeStamp));
+        /*retVal.append("BOL: ");
         retVal.append(InitialBolus);
         retVal.append(" SBG: ");
         retVal.append(StartingBG);*/
@@ -116,5 +100,15 @@ public class JournalEntry
     public void set_foodID(int _foodID)
     {
         this._foodID = _foodID;
+    }
+
+    public String getFoodName()
+    {
+        return foodName;
+    }
+
+    public void setFoodName(String foodName)
+    {
+        this.foodName = foodName;
     }
 }

@@ -24,13 +24,27 @@ public class BG_EstimateReceiver extends BroadcastReceiver
         mDbHelper = new JournalEntryDbHelper(context);
 
         final double bgEstimate = intent.getDoubleExtra("com.eveningoutpost.dexdrip.Extras.BgEstimate", 0);
-        long datetime = intent.getLongExtra("com.eveningoutpost.dexdrip.Extras.Time", new Date().getTime());
+        long timeOfReading = intent.getLongExtra("com.eveningoutpost.dexdrip.Extras.Time", new Date().getTime());
+        String slopeName = intent.getStringExtra("com.eveningoutpost.dexdrip.Extras.BgSlopeName");
 
-        JournalEntryList activeEntries = mDbHelper.getActiveEntries();
+
+        JournalEntryList activeEntries = mDbHelper.getAllEntries();
 
         for (JournalEntry entry: activeEntries)
         {
-            //mDbHelper.insertBG_Reading(entry.get_id(), bgEstimate, datetime);
+            long startTime = entry.getStartTime().getTime();
+            long timeDifferenceInMilliseconds = timeOfReading - startTime;
+            long timeDifferenceInSeconds = timeDifferenceInMilliseconds / 1000;
+            long timeDifferenceInMinutes = timeDifferenceInSeconds / 60;
+
+            if(timeDifferenceInMinutes < 240)
+            {
+                mDbHelper.insertBG_Reading(entry.get_id(), (int) bgEstimate, (int) timeDifferenceInMinutes, slopeName);
+            }
+            else
+            {
+                mDbHelper.setJournalEntryAsInactive(entry.get_id());
+            }
         }
     }
 }

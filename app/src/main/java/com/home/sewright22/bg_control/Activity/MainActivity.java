@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
         {
             int entryID =  data.getExtras().getInt("entryID");
 
-            createBloodSugarReminder(entryID);
+            //createBloodSugarReminder(entryID);
 
             UpdateDisplayedJournal();
         }
@@ -125,63 +125,63 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnCli
         mDbHelper.insertBolus(2.4, 1, 60, 40);
         mDbHelper.insertJournalEntry(first);
 
-        mDbHelper.insertBG_Reading(1, 85, 0);
-        mDbHelper.insertBG_Reading(1,88,5);
-        mDbHelper.insertBG_Reading(1,92,10);
-        mDbHelper.insertBG_Reading(1,99,15);
-        mDbHelper.insertBG_Reading(1, 110, 20);
-        mDbHelper.insertBG_Reading(1, 115, 25);
-        mDbHelper.insertBG_Reading(1, 119, 30);
-        mDbHelper.insertBG_Reading(1, 123, 35);
-        mDbHelper.insertBG_Reading(1, 130, 40);
-        mDbHelper.insertBG_Reading(1, 142, 45);
-        mDbHelper.insertBG_Reading(1,149,50);
-        mDbHelper.insertBG_Reading(1,158,55);
-        mDbHelper.insertBG_Reading(1,162,60);
-        mDbHelper.insertBG_Reading(1,160,65);
-        mDbHelper.insertBG_Reading(1,156,70);
-        mDbHelper.insertBG_Reading(1,153,75);
-        mDbHelper.insertBG_Reading(1,155,80);
-        mDbHelper.insertBG_Reading(1,152,85);
-        mDbHelper.insertBG_Reading(1,148,90);
-        mDbHelper.insertBG_Reading(1,144,95);
-        mDbHelper.insertBG_Reading(1,135,100);
-        mDbHelper.insertBG_Reading(1,130,105);
-        mDbHelper.insertBG_Reading(1,118,110);
-        mDbHelper.insertBG_Reading(1,110,115);
-        mDbHelper.insertBG_Reading(1,100,120);
-        mDbHelper.insertBG_Reading(1,100,125);
-        mDbHelper.insertBG_Reading(1,98,130);
-        mDbHelper.insertBG_Reading(1,100,135);
-        mDbHelper.insertBG_Reading(1,95,140);
-        mDbHelper.insertBG_Reading(1,90,145);
-        mDbHelper.insertBG_Reading(1,90,150);
-        mDbHelper.insertBG_Reading(1,89,155);
-        mDbHelper.insertBG_Reading(1,88,160);
-        mDbHelper.insertBG_Reading(1,87,165);
-        mDbHelper.insertBG_Reading(1,86,170);
-        mDbHelper.insertBG_Reading(1,85,175);
-        mDbHelper.insertBG_Reading(1,84,180);
-        mDbHelper.insertBG_Reading(1,83,185);
-        mDbHelper.insertBG_Reading(1,82,190);
-        mDbHelper.insertBG_Reading(1,80,195);
-        mDbHelper.insertBG_Reading(1,89,200);
-        mDbHelper.insertBG_Reading(1,88,205);
-        mDbHelper.insertBG_Reading(1,87,210);
-        mDbHelper.insertBG_Reading(1,86,215);
-        mDbHelper.insertBG_Reading(1,85,220);
-        mDbHelper.insertBG_Reading(1,84,225);
-        mDbHelper.insertBG_Reading(1,83,230);
-        mDbHelper.insertBG_Reading(1,82,235);
-        mDbHelper.insertBG_Reading(1,80,240);
+        mDbHelper.insertBG_Reading(1, 85, 0, "");
+        mDbHelper.insertBG_Reading(1,88,5, "");
+        mDbHelper.insertBG_Reading(1,92,10, "");
+        mDbHelper.insertBG_Reading(1,99,15, "");
+        mDbHelper.insertBG_Reading(1, 110, 20, "");
+        mDbHelper.insertBG_Reading(1, 115, 25, "");
+        mDbHelper.insertBG_Reading(1, 119, 30, "");
+        mDbHelper.insertBG_Reading(1, 123, 35, "");
+        mDbHelper.insertBG_Reading(1, 130, 40, "");
+        mDbHelper.insertBG_Reading(1, 142, 45, "");
+        mDbHelper.insertBG_Reading(1,149,50, "");
+        mDbHelper.insertBG_Reading(1,158,55, "");
+        mDbHelper.insertBG_Reading(1,162,60, "");
+        mDbHelper.insertBG_Reading(1,160,65, "");
+        mDbHelper.insertBG_Reading(1,156,70, "");
+        mDbHelper.insertBG_Reading(1,153,75, "");
+        mDbHelper.insertBG_Reading(1,155,80, "");
+        mDbHelper.insertBG_Reading(1,152,85, "");
+        mDbHelper.insertBG_Reading(1,148,90, "");
+        mDbHelper.insertBG_Reading(1,144,95, "");
+        mDbHelper.insertBG_Reading(1,135,100, "");
+        mDbHelper.insertBG_Reading(1,130,105, "");
+        mDbHelper.insertBG_Reading(1,118,110, "");
+        mDbHelper.insertBG_Reading(1,110,115, "");
+        mDbHelper.insertBG_Reading(1,100,120, "");
+        mDbHelper.insertBG_Reading(1,100,125, "");
+        mDbHelper.insertBG_Reading(1,98,130, "");
+        mDbHelper.insertBG_Reading(1,100,135, "");
+        mDbHelper.insertBG_Reading(1,95,140, "");
+        mDbHelper.insertBG_Reading(1,90,145, "");
+        mDbHelper.insertBG_Reading(1,90,150, "");
+        mDbHelper.insertBG_Reading(1,89,155, "");
+        mDbHelper.insertBG_Reading(1,88,160, "");
+        mDbHelper.insertBG_Reading(1,87,165, "");
+        mDbHelper.insertBG_Reading(1,86,170, "");
+        mDbHelper.insertBG_Reading(1,85,175, "");
+        mDbHelper.insertBG_Reading(1,84,180, "");
+        mDbHelper.insertBG_Reading(1,83,185, "");
+        mDbHelper.insertBG_Reading(1,82,190, "");
+        mDbHelper.insertBG_Reading(1,80,195, "");
+        mDbHelper.insertBG_Reading(1,89,200, "");
+        mDbHelper.insertBG_Reading(1,88,205, "");
+        mDbHelper.insertBG_Reading(1,87,210, "");
+        mDbHelper.insertBG_Reading(1,86,215, "");
+        mDbHelper.insertBG_Reading(1,85,220, "");
+        mDbHelper.insertBG_Reading(1,84,225, "");
+        mDbHelper.insertBG_Reading(1,83,230, "");
+        mDbHelper.insertBG_Reading(1,82,235, "");
+        mDbHelper.insertBG_Reading(1,80,240, "");
     }
 
 
     private void UpdateDisplayedJournal()
     {
-        //mDbHelper.dropTables();
-        //mDbHelper.createTables();
-        //insertTestRecord();
+        mDbHelper.dropTables();
+        mDbHelper.createTables();
+        insertTestRecord();
 
         ListView listView = (ListView) findViewById(R.id.list);
 
